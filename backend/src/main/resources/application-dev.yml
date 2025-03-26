@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/wholistika
+    username: whol1st1ka-bak
+    password: whol1st1k@.nta
+    driverClassName: org.h2.Driver

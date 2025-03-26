@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<body>
+    <div th:fragment="layout (content)" class="">
+
+        <section class="">
+            <h3 class="text-xl font-semibold">Wholistika</h3>
+            <figure class="h-full flex flex-col items-center gap-12 before:bg-gray-400 before:h-full before:w-px before:block before:content-[''] after:block after:h-full
+          after:w-px after:bg-gray-400 after:content-[''] ">
+                <img src="/images/Logo.svg" alt="logo" class="w-8 max-w-10"/>
+            </figure>
+        </section>
+
+        <section class="w-full md:max-w-lg mt-2 md:mt-0">
+            <div th:replace="${content}">layout Content</div>
+        </section>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wholistika - Login</title>
+    <link rel="stylesheet" href="/css/login.dist.css">
+</head>
+<body>
+<div class=" max-w-screen-lg grid sm:grid-flow-col gap-12 sm:gap-20 py-32 sm:pr-12 sm:py-0 sm:items-center content-start sm:content-normal h-screen w-11/12 mx-auto">
+
+    <section class="flex flex-1 gap-4  col-span-1 sm:h-full sm:py-12  items-center sm:flex-row-reverse sm:col-span-1">
+        <figure class="sm:h-full flex flex-col items-center sm:gap-8 before:bg-gray-300 before:h-full before:w-px before:block before:content-[''] after:block after:h-full
+      after:w-px after:bg-gray-400 after:content-[''] ">
+            <img src="/images/Logo.svg" alt="logo" class="w-8 max-w-10"/>
+        </figure>
+        <h3 class="text-xl font-semibold">Wholistika</h3>
+    </section>
+
+    <main class="grid gap-6 w-full  items-center sm:col-span-5 max-w-lg">
+        <header class="grid gap-1">
+            <h1 class="text-3xl font-bold">Register</h1>
+            <p>Don't have an account? <a href="#" class="font-bold text-teal-800">sign in</a></p>
+        </header>
+
+        <form th:action="@{/login}" method="post" class="w-full grid  gap-6">
+
+            <div class="flex flex-col gap-1">
+                <label for="username">Email</label>
+                <input id="username" name="username" type="text" placeholder="john_quill" class=""/>
+                <p th:if="${param.error}" class="text-red-600">
+                    Invalid email or password
+                </p>
+            </div>
+
+
+            <div class="flex flex-col gap-1">
+                <label for="password">Password</label>
+
+                <div class="relative">
+
+                    <input type="password" id="password" name="password" placeholder="1234@Password_may_not_be_secure"
+                           class="w-full"/>
+                    <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500"
+                          onclick="togglePassword()">
+                        <svg id="eye-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="w-[1rem] hidden"><path
+                                d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle
+                                cx="12" cy="12" r="3"/>
+                        </svg>
+                        <svg id="eye-close" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                             viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="w-[1rem]"><path
+                                d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path
+                                d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path
+                                d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path
+                                d="m2 2 20 20"/>
+                          </svg>
+                    </span>
+                </div>
+
+                <p th:if="${param.error}" class="text-red-600">
+                    Invalid email or password
+                </p>
+            </div>
+
+            <button type="submit" class="bg-teal-800 text-white">
+                Log in
+            </button>
+        </form>
+    </main>
+
+</div>
+
+
+</body>
+<script>
+    function togglePassword() {
+        const eyeOpen = document.querySelector("#eye-open")
+        const eyeClose = document.querySelector("#eye-close")
+
+        const passwordField = document.getElementById('password');
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
+        }
+        eyeClose.classList.toggle("hidden");
+        eyeOpen.classList.toggle("hidden");
+    }
+</script>
+</html>

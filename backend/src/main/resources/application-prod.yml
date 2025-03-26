@@ -1,0 +1,10 @@
+server:
+  port: 5050
+  address: 0.0.0.0
+
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/blogabit
+    username: whol1st1ka-bak
+    password: whol1st1k@.nta
+    driverClassName: org.h2.Driver
