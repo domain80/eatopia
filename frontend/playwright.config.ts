@@ -49,18 +49,30 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+        bypassCSP: true, // add this to disable cors
+        launchOptions: {
+          args: ['--disable-web-security'], // add this to disable cors
+        },
       },
     },
     {
       name: 'firefox',
       use: {
         ...devices['Desktop Firefox'],
+        bypassCSP: true, // add this to disable cors
+        launchOptions: {
+          args: ['--disable-web-security'], // add this to disable cors
+        },
       },
     },
     {
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],
+        bypassCSP: true, // add this to disable cors
+        launchOptions: {
+          args: ['--disable-web-security'], // add this to disable cors
+        },
       },
     },
 

@@ -1,20 +1,8 @@
 import { z } from 'zod'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import type { FormSubmitEvent } from '@primevue/forms'
-import { OnboardingService } from '../services/OnboardingService'
-import { ApiResponse } from '@/shared/models/ApiResponse'
-import { useToast } from 'primevue/usetoast'
-import router from '@/router'
-
-interface RegistrationFormData {
-  firstName: string
-  lastName: string
-  email: string
-  phoneNumber: string
-  password: string
-  confirmPassword: string
-  role: 'professional' | 'user'
-}
+import { OnboardingService } from '../onboarding.service'
+import type { RegistrationFormData } from './dto/registration.dto'
 
 const registrationSchema = z
   .object({
@@ -57,24 +45,22 @@ const registrationSchema = z
     path: ['confirmPassword'],
   })
 
-export const useRegistration = () => {
+const handleSubmit = async (e: FormSubmitEvent): Promise<void> => {
   const onboardingService = OnboardingService.getInstance()
-  const toast = useToast()
-
-  const handleSubmit = async (e: FormSubmitEvent): Promise<void> => {
-    if (!e.valid) {
-      return
-    }
-
-    const formData = e.values as RegistrationFormData
-    // Remove confirmPassword from the data before sending
-    const response = await onboardingService.register(formData, toast)
-
-    // if (response != null) {
-    //   router.push('/login')
-    // }
+  if (!e.valid) {
+    return
   }
 
+  const formData = e.values as RegistrationFormData
+  const response = await onboardingService.register(formData)
+  console.log({ response })
+
+  // if (response != null) {
+  //   router.push('/login')
+  // }
+}
+
+export const useRegistration = () => {
   return {
     resolver: zodResolver(registrationSchema),
     handleSubmit,

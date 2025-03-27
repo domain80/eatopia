@@ -9,15 +9,16 @@
 
 :root {
   font-size: 14px;
+  @apply bg-gray-50;
 }
 
 body {
   font-family: 'BricolageGrotesque', sans-serif;
   font-size: 1rem;
-  background-blend-mode: soft-light;
+  background-blend-mode: overlay;
   background-size: cover;
   background:
-    linear-gradient(ellipse at top, rgba(255, 239, 239, 0.427), rgba(237, 255, 243, 0.413)),
+    radial-gradient(ellipse at bottom, rgba(255, 250, 250, 0.84), rgba(234, 255, 241, 0.48)),
     url('/images/background.svg') repeat;
   @apply text-gray-600 tracking-[0.02rem] accent-teal-600;
 }

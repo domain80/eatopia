@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+document.title = 'Wholistika | Register'
+
 import { Form, FormField } from '@primevue/forms';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -6,27 +9,17 @@ import Password from 'primevue/password';
 import RadioButton from 'primevue/radiobutton';
 import InputMask from 'primevue/inputmask';
 import Message from 'primevue/message';
+
 import { useRegistration } from './registration.composable';
+import AuthLayout from './components/Auth.layout.vue';
 
 const { resolver, handleSubmit } = useRegistration();
 
-document.title = 'Wholistika | Register'
 </script>
 
 <template>
-
-  <div
-    class=" max-w-screen-lg grid sm:grid-flow-col gap-12 sm:gap-20 py-8 sm:pr-12 sm:py-0 sm:items-center content-start sm:content-normal h-screen w-11/12 mx-auto">
-
-    <section class="flex flex-1 gap-4  col-span-1 sm:h-full sm:py-12  items-center sm:flex-row-reverse sm:col-span-1">
-      <figure class="sm:h-full flex flex-col items-center sm:gap-8 before:bg-gray-300 before:h-full before:w-px before:block before:content-[''] after:block after:h-full
-      after:w-px after:bg-gray-400 after:content-[''] ">
-        <img src="/images/Logo.svg" alt="logo" class="w-8 max-w-10" />
-      </figure>
-      <h3 class="text-xl font-semibold">Wholistika</h3>
-    </section>
-
-    <main class="grid gap-6 w-full items-center sm:col-span-5 max-w-4xl">
+  <AuthLayout>
+    <main class="grid gap-6 w-full items-center sm:col-span-5 max-w-xl">
       <header class="grid gap-1">
         <h1 class="text-3xl font-bold">Register</h1>
         <p>Don't have an account? <a href="#" class="font-bold text-teal-800">sign in</a></p>
@@ -35,7 +28,7 @@ document.title = 'Wholistika | Register'
       <Form v-slot="$form" :resolver @submit="handleSubmit" class="w-full grid sm:grid-cols-2 gap-6">
         <FormField class="flex flex-col gap-1">
           <label for="firstName">First Name</label>
-          <InputText id="firstName" name="firstName" type="text" placeholder="Joe" class="max-w-full"
+          <InputText size="small" id="firstName" name="firstName" type="text" placeholder="Joe" class="max-w-full"
             data-testid="firstName-input" aria-label="First Name" />
           <Message v-if="$form.firstName?.invalid" severity="error" size="small" variant="simple"
             data-testid="firstName-error">{{
@@ -43,7 +36,7 @@ document.title = 'Wholistika | Register'
         </FormField>
         <FormField class="flex flex-col gap-1">
           <label for="lastName">Last Name</label>
-          <InputText id="lastName" name="lastName" type="text" placeholder="Doe" class="max-w-full"
+          <InputText size="small" id="lastName" name="lastName" type="text" placeholder="Doe" class="max-w-full"
             data-testid="lastName-input" aria-label="Last Name" />
           <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple"
             data-testid="lastName-error">{{
@@ -52,7 +45,7 @@ document.title = 'Wholistika | Register'
 
         <FormField class="flex flex-col gap-1">
           <label for="email">Email</label>
-          <InputText id="email" name="email" type="email" placeholder="joe@example.com" class="max-w-full"
+          <InputText size="small" id="email" name="email" type="email" placeholder="joe@example.com" class="max-w-full"
             data-testid="email-input" aria-label="Email" />
           <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple" data-testid="email-error">
             {{
@@ -60,7 +53,7 @@ document.title = 'Wholistika | Register'
         </FormField>
         <FormField class="flex flex-col gap-1">
           <label for="phoneNumber">Phone</label>
-          <InputMask id="phoneNumber" name="phoneNumber" type="text" placeholder="(233) 999-999-999"
+          <InputMask size="small" id="phoneNumber" name="phoneNumber" type="text" placeholder="(233) 999-999-999"
             mask="(233) 99-999-9999" fluid data-testid="phoneNumber-input" aria-label="Phone" />
           <Message v-if="$form.phoneNumber?.invalid" severity="error" size="small" variant="simple"
             data-testid="phoneNumber-error">
@@ -70,16 +63,17 @@ document.title = 'Wholistika | Register'
 
         <FormField class="flex flex-col gap-1">
           <label for="password">Password</label>
-          <Password id="password" name="password" placeholder="1234@Password_may_not_be_secure" fluid toggleMask
-            :feedback="false" data-testid="password-input" aria-label="Password" />
+          <Password size="small" id="password" name="password" placeholder="1234@Password_may_not_be_secure" fluid
+            toggleMask :feedback="false" data-testid="password-input" aria-label="Password" />
           <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple"
             data-testid="password-error">{{
               $form.password.error.message }}</Message>
         </FormField>
         <FormField class="flex flex-col gap-1">
           <label for="confirmPassword">Confirm Password</label>
-          <Password id="confirmPassword" name="confirmPassword" placeholder="1234@Password_may_not_be_secure" fluid
-            toggleMask :feedback="false" data-testid="confirmPassword-input" aria-label="Confirm Password" />
+          <Password size="small" id="confirmPassword" name="confirmPassword"
+            placeholder="1234@Password_may_not_be_secure" fluid toggleMask :feedback="false"
+            data-testid="confirmPassword-input" aria-label="Confirm Password" />
           <Message v-if="$form.confirmPassword?.invalid" severity="error" size="small" variant="simple"
             data-testid="confirmPassword-error">{{
               $form.confirmPassword.error.message }}</Message>
@@ -107,9 +101,7 @@ document.title = 'Wholistika | Register'
         </Button>
       </Form>
     </main>
-
-  </div>
-
+  </AuthLayout>
 
 
 </template>

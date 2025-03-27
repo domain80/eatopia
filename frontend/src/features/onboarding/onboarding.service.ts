@@ -1,8 +1,7 @@
 import axios, { AxiosError } from 'axios'
-import { ApiResponse } from '@/shared/models/ApiResponse'
-import { useAuthStore } from '@/stores/auth.store'
-import type { UserAccount } from '@/shared/types/UserAccount.type'
-import { useToast } from 'primevue/usetoast'
+import { ApiResponse } from '@/shared/models/apiResponse.model'
+import { useAuthStore } from '@/shared/stores/auth.store'
+import type { UserAccount } from '@/shared/models/userAccount.model'
 import type { ToastServiceMethods } from 'primevue'
 
 interface RegistrationData {
@@ -24,19 +23,28 @@ interface TokenResponse {
 export class OnboardingService {
   private static instance: OnboardingService
   private readonly baseUrl: string
+  private toast: ToastServiceMethods
 
-  private constructor() {
+  private constructor(toast: ToastServiceMethods) {
     this.baseUrl = import.meta.env.VITE_WHOLISTIKA_BACKEND || ''
+    this.toast = toast
   }
 
-  public static getInstance(): OnboardingService {
+  public static instantiate(toast: ToastServiceMethods): OnboardingService {
     if (!OnboardingService.instance) {
-      OnboardingService.instance = new OnboardingService()
+      OnboardingService.instance = new OnboardingService(toast)
     }
     return OnboardingService.instance
   }
 
-  private async getAccessToken(): Promise<TokenResponse | null> {
+  public static getInstance(): OnboardingService {
+    if (!OnboardingService.instance) {
+      throw new Error('OnboardingService must be instantiated with toast first')
+    }
+    return OnboardingService.instance
+  }
+
+  public async getAccessToken(): Promise<TokenResponse | null> {
     if (useAuthStore().isAuthenticated) {
       return {
         access_token: useAuthStore().getAccessToken!,
@@ -76,26 +84,22 @@ export class OnboardingService {
 
       return apiResponse.body!
     } catch (error) {
+      this.toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to get access token',
+        life: 6000,
+      })
       return null
     }
   }
 
-  public async register(
-    data: RegistrationData,
-    toast: ToastServiceMethods,
-  ): Promise<UserAccount | null> {
+  public async register(data: RegistrationData): Promise<UserAccount | null> {
     try {
       // Ensure we have an access token
       const tokenResponse = await this.getAccessToken()
       if (!tokenResponse) {
-        toast.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to get access token',
-          life: 6000,
-        })
-
-        return null
+        throw new Error('Failed to get access token')
       }
 
       const response = await axios.post(`${this.baseUrl}/api/auth/register`, data, {
@@ -106,7 +110,7 @@ export class OnboardingService {
       })
 
       if (response.data.error != null) {
-        toast.add({
+        this.toast.add({
           severity: 'error',
           summary: 'User registration failed',
           detail: response.data.error.message,
@@ -116,23 +120,24 @@ export class OnboardingService {
         return null
       }
 
-      toast.add({
+      this.toast.add({
         severity: 'success',
         summary: 'User registration successful',
         life: 6000,
       })
 
+      console.log({ response })
       return response.data as UserAccount
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast.add({
+        this.toast.add({
           severity: 'error',
           summary: 'User registration failed',
           detail: error.response?.data.error.message,
           life: 6000,
         })
       } else {
-        toast.add({
+        this.toast.add({
           severity: 'error',
           summary: 'User registration failed',
           detail: '',
