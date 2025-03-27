@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+document.title = 'Wholistika';
+
+import { OnboardingService } from '@/features/onboarding/onboarding.service'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
-import { OnboardingService } from '@/features/onboarding/onboarding.service'
 import { onMounted } from 'vue'
+import { RouterView } from 'vue-router'
 
 const toast = useToast()
 
@@ -20,5 +22,3 @@ onMounted(async () => {
   <Toast />
   <RouterView />
 </template>
-
-<style scoped></style>
