@@ -4,7 +4,6 @@ import com.domain80.wholistika.utils.CustomResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -39,7 +38,7 @@ public class GlobalResponseWrapper implements ResponseBodyAdvice<Object> {
 
         // Handle null responses
         if (body == null) {
-            return new CustomResponse<>(HttpStatus.valueOf(statusCode), null);
+            return new CustomResponse(HttpStatus.valueOf(statusCode), null);
         }
 
         // If it's already an ApiResponse, return as is
@@ -48,6 +47,6 @@ public class GlobalResponseWrapper implements ResponseBodyAdvice<Object> {
         }
 
         // Wrap successful responses with the status code
-        return new CustomResponse<>(HttpStatus.valueOf(statusCode), body);
+        return new CustomResponse(HttpStatus.valueOf(statusCode), body);
     }
 }

@@ -18,7 +18,7 @@ body {
   background-blend-mode: overlay;
   background-size: cover;
   background:
-    radial-gradient(ellipse at bottom, rgba(255, 250, 250, 0.84), rgba(234, 255, 241, 0.48)),
+    radial-gradient(ellipse at bottom, rgba(255, 255, 255, 0.69), rgba(255, 248, 243, 0.58)),
     url('/images/background.svg') repeat;
   @apply text-gray-600 tracking-[0.02rem] accent-teal-600;
 }

@@ -1,20 +1,14 @@
-package com.blogabit.auth.dto;
+package com.domain80.wholistika.utils;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
+import org.springframework.http.HttpStatus;
 
 @Data
-@Getter
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CustomException extends RuntimeException{
+@Builder
+public class CustomException extends RuntimeException {
+    private String message;
     private String details;
-
-
-    public CustomException(String message,  String details) {
-        super(message);
-        this.details  = details;
-    }
+    private Integer code;
+    private HttpStatus status;
 }

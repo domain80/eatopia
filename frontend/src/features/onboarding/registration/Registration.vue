@@ -28,7 +28,7 @@ const { resolver, handleSubmit } = useRegistration();
       <Form v-slot="$form" :resolver @submit="handleSubmit" class="w-full grid sm:grid-cols-2 gap-6">
         <FormField class="flex flex-col gap-1">
           <label for="firstName">First Name</label>
-          <InputText size="small" id="firstName" name="firstName" type="text" placeholder="Joe" class="max-w-full"
+          <InputText id="firstName" name="firstName" type="text" placeholder="Joe" class="max-w-full"
             data-testid="firstName-input" aria-label="First Name" />
           <Message v-if="$form.firstName?.invalid" severity="error" size="small" variant="simple"
             data-testid="firstName-error">{{
@@ -36,7 +36,7 @@ const { resolver, handleSubmit } = useRegistration();
         </FormField>
         <FormField class="flex flex-col gap-1">
           <label for="lastName">Last Name</label>
-          <InputText size="small" id="lastName" name="lastName" type="text" placeholder="Doe" class="max-w-full"
+          <InputText id="lastName" name="lastName" type="text" placeholder="Doe" class="max-w-full"
             data-testid="lastName-input" aria-label="Last Name" />
           <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple"
             data-testid="lastName-error">{{
@@ -45,7 +45,7 @@ const { resolver, handleSubmit } = useRegistration();
 
         <FormField class="flex flex-col gap-1">
           <label for="email">Email</label>
-          <InputText size="small" id="email" name="email" type="email" placeholder="joe@example.com" class="max-w-full"
+          <InputText id="email" name="email" type="email" placeholder="joe@example.com" class="max-w-full"
             data-testid="email-input" aria-label="Email" />
           <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple" data-testid="email-error">
             {{
@@ -53,7 +53,7 @@ const { resolver, handleSubmit } = useRegistration();
         </FormField>
         <FormField class="flex flex-col gap-1">
           <label for="phoneNumber">Phone</label>
-          <InputMask size="small" id="phoneNumber" name="phoneNumber" type="text" placeholder="(233) 999-999-999"
+          <InputMask id="phoneNumber" name="phoneNumber" type="text" placeholder="(233) 999-999-999"
             mask="(233) 99-999-9999" fluid data-testid="phoneNumber-input" aria-label="Phone" />
           <Message v-if="$form.phoneNumber?.invalid" severity="error" size="small" variant="simple"
             data-testid="phoneNumber-error">
@@ -63,17 +63,16 @@ const { resolver, handleSubmit } = useRegistration();
 
         <FormField class="flex flex-col gap-1">
           <label for="password">Password</label>
-          <Password size="small" id="password" name="password" placeholder="1234@Password_may_not_be_secure" fluid
-            toggleMask :feedback="false" data-testid="password-input" aria-label="Password" />
+          <Password id="password" name="password" placeholder="1234@Pass_word_be_secure" fluid toggleMask
+            :feedback="false" data-testid="password-input" aria-label="Password" />
           <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple"
             data-testid="password-error">{{
               $form.password.error.message }}</Message>
         </FormField>
         <FormField class="flex flex-col gap-1">
           <label for="confirmPassword">Confirm Password</label>
-          <Password size="small" id="confirmPassword" name="confirmPassword"
-            placeholder="1234@Password_may_not_be_secure" fluid toggleMask :feedback="false"
-            data-testid="confirmPassword-input" aria-label="Confirm Password" />
+          <Password id="confirmPassword" name="confirmPassword" placeholder="1234@Pass_word_be_secure" fluid toggleMask
+            :feedback="false" data-testid="confirmPassword-input" aria-label="Confirm Password" />
           <Message v-if="$form.confirmPassword?.invalid" severity="error" size="small" variant="simple"
             data-testid="confirmPassword-error">{{
               $form.confirmPassword.error.message }}</Message>
@@ -81,13 +80,13 @@ const { resolver, handleSubmit } = useRegistration();
 
         <div class="flex flex-col gap-1 grid-cols-2 w-full sm:col-span-2">
           <p class="col-span-2 font-medium">Role: I am a...</p>
-          <div class="flex gap-6 w-full col-span-2">
-            <FormField class="flex items-center gap-2 w-full">
+          <div class="flex gap-6 w-full col-span-2 ">
+            <FormField class="flex items-center gap-2 col-span-2 sm:w-full">
               <RadioButton inputId="professional" name="role" value="professional" data-testid="role-professional"
                 aria-label="Health Professional" />
               <label for="professional">Health Professional</label>
             </FormField>
-            <FormField class="flex items-center gap-2 w-full">
+            <FormField class="flex items-center gap-2 col-span-1 sm:col-span-2">
               <RadioButton inputId="patient" name="role" value="patient" data-testid="role-patient"
                 aria-label="Patient" />
               <label for="patient">Patient</label>

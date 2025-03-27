@@ -1,4 +1,4 @@
-package com.domain80.wholistika.models;
+package com.domain80.wholistika.features.userAccount.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
