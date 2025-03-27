@@ -1,4 +1,4 @@
-package com.domain80.wholistika.controllers;
+package com.domain80.wholistika.features.auth.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

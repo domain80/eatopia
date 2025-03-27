@@ -1,35 +1,31 @@
-@import './base.css';
+@import 'tailwindcss';
+@import 'tailwindcss-primeui';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+@font-face {
+  font-family: 'BricolageGrotesque';
+  src: url('/fonts/BricolageGrotesque.ttf');
+  font-style: auto;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+:root {
+  font-size: 14px;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+body {
+  font-family: 'BricolageGrotesque', sans-serif;
+  font-size: 1rem;
+  background-blend-mode: soft-light;
+  background-size: cover;
+  background:
+    linear-gradient(ellipse at top, rgba(255, 239, 239, 0.427), rgba(237, 255, 243, 0.413)),
+    url('/images/background.svg') repeat;
+  @apply text-gray-600 tracking-[0.02rem] accent-teal-600;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+/* input {
+  @apply drop-shadow-xs bg-white placeholder:text-gray-300 border border-gray-200 rounded-md py-1.5 px-4 focus:outline focus:outline-offset-1 focus:outline-teal-600;
 }
+
+button {
+  @apply font-medium cursor-pointer focus:outline focus:outline-offset-2 rounded-md  focus:outline-teal-600 py-2.5 px-6;
+} */
