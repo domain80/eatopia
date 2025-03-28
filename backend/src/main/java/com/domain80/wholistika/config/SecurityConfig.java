@@ -65,10 +65,10 @@ public class SecurityConfig {
                         authorizationServer
                                 .oidc(Customizer.withDefaults())    // Enable OpenID Connect 1.0
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+//                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                )
                 .authorizeHttpRequests((authorize) ->
                         authorize
                                 .anyRequest().authenticated()
@@ -114,23 +114,11 @@ public class SecurityConfig {
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addAllowedOrigin("*");
-        config.setAllowCredentials(true);
+//        config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return source;
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails userDetails = UserAccount.builder()
-//                .email("work.davidmainoo@gmail.com")
-//                .password("{noop}password")
-//                .role(UserRole.USER)
-//                .firstName("david")
-//                .lastName("eainoo")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(userDetails);
-//    }
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -139,33 +127,47 @@ public class SecurityConfig {
 
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
-        RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
+        RegisteredClient wholistikaWeb = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("wholistika-web-client")
                 .clientSecret(passwordEncoder().encode("wholistika-web-client-secret"))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .clientSettings(ClientSettings.builder()
-                        .requireProofKey(false)
-                        .requireAuthorizationConsent(false)
-                        .build()
-                )
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+//                .clientSettings(ClientSettings.builder()
+//                        .requireProofKey(false)
+//                        .requireAuthorizationConsent(false)
+//                        .build()
+//                )
                 .tokenSettings(TokenSettings.builder()
                         .accessTokenTimeToLive(Duration.ofDays(1))
                         .build()
                 )
+                .redirectUri("http://localhost:5173/authorized")
+                .scope(OidcScopes.OPENID)
                 .scope("user.register")
                 .scope("client.read")
                 .build();
 
-        RegisteredClient wholistikaWeb = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("client")
-                .clientSecret(passwordEncoder().encode("client-secret"))
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .scope(OidcScopes.OPENID)
-                .build();
+        RegisteredClient registeredClient =
+                RegisteredClient
+                        .withId(UUID.randomUUID().toString())
+                        .clientId("client")
+                        .clientSecret(passwordEncoder().encode("secret"))
+                        .clientAuthenticationMethod(
+                                ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                        .authorizationGrantType(
+                                AuthorizationGrantType.AUTHORIZATION_CODE)
+                        .authorizationGrantType(
+                                AuthorizationGrantType.CLIENT_CREDENTIALS)
+                        .authorizationGrantType(
+                                AuthorizationGrantType.REFRESH_TOKEN)
+                        .redirectUri("https://www.manning.com/authorized")
+                        .scope(OidcScopes.OPENID)
+                        .build();
 
-        return new InMemoryRegisteredClientRepository(oidcClient, wholistikaWeb);
+
+        return new InMemoryRegisteredClientRepository(wholistikaWeb, registeredClient);
     }
 
     @Bean

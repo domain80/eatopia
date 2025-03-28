@@ -1,8 +1,13 @@
 import { z } from 'zod'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import type { FormSubmitEvent } from '@primevue/forms'
-import { OnboardingService } from '../onboarding.service'
-import type { RegistrationFormData } from './dto/registration.dto'
+import { OnboardingService } from '../services/onboarding.service'
+import type { RegistrationDto } from './dto/registration.dto'
+import { ref } from 'vue'
+import { useToast } from 'primevue/usetoast'
+import { AxiosError } from 'axios'
+
+const isLoading = ref(false)
 
 const registrationSchema = z
   .object({
@@ -45,24 +50,46 @@ const registrationSchema = z
     path: ['confirmPassword'],
   })
 
-const handleSubmit = async (e: FormSubmitEvent): Promise<void> => {
-  const onboardingService = OnboardingService.getInstance()
-  if (!e.valid) {
-    return
+export const useRegistration = () => {
+  const toast = useToast()
+
+  const handleSubmit = async (e: FormSubmitEvent): Promise<void> => {
+    const onboardingService = OnboardingService.getInstance()
+    if (!e.valid) {
+      return
+    }
+
+    try {
+      isLoading.value = true
+      const formData = e.values as RegistrationDto
+      const response = await onboardingService.register(formData)
+      console.log({ response })
+
+      onboardingService.login()
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.add({
+          severity: 'error',
+          summary: 'User registration failed',
+          detail: error.response?.data?.error?.message ?? error.message,
+          life: 6000,
+        })
+      } else {
+        toast.add({
+          severity: 'error',
+          summary: 'User registration failed',
+          detail: 'Please try again later',
+          life: 6000,
+        })
+      }
+    } finally {
+      isLoading.value = false
+    }
   }
 
-  const formData = e.values as RegistrationFormData
-  const response = await onboardingService.register(formData)
-  console.log({ response })
-
-  // if (response != null) {
-  //   router.push('/login')
-  // }
-}
-
-export const useRegistration = () => {
   return {
     resolver: zodResolver(registrationSchema),
     handleSubmit,
+    isLoading,
   }
 }

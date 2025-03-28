@@ -12,8 +12,10 @@ import Message from 'primevue/message';
 
 import { useRegistration } from './registration.composable';
 import AuthLayout from './components/Auth.layout.vue';
+import { OnboardingService } from '../services/onboarding.service';
 
-const { resolver, handleSubmit } = useRegistration();
+const { resolver, handleSubmit, isLoading } = useRegistration();
+const onboardingService = OnboardingService.getInstance()
 
 </script>
 
@@ -22,10 +24,13 @@ const { resolver, handleSubmit } = useRegistration();
     <main class="grid gap-6 w-full items-center sm:col-span-5 max-w-xl">
       <header class="grid gap-1">
         <h1 class="text-3xl font-bold">Register</h1>
-        <p>Don't have an account? <a href="#" class="font-bold text-teal-800">sign in</a></p>
+        <p>Already have an account? <button class="font-bold text-teal-800 cursor-pointer"
+            @click="onboardingService.login">sign
+            in</button></p>
       </header>
 
-      <Form v-slot="$form" :resolver @submit="handleSubmit" class="w-full grid sm:grid-cols-2 gap-6">
+      <Form v-slot="$form" :resolver @submit="handleSubmit" validate-on-blur :validate-on-value-update="false"
+        :validate-on-submit="true" class="w-full grid sm:grid-cols-2 gap-6">
         <FormField class="flex flex-col gap-1">
           <label for="firstName">First Name</label>
           <InputText id="firstName" name="firstName" type="text" placeholder="Joe" class="max-w-full"
@@ -95,7 +100,8 @@ const { resolver, handleSubmit } = useRegistration();
           <Message v-if="$form.role?.invalid" severity="error" size="small" variant="simple" data-testid="role-error">{{
             $form.role.error.message }}</Message>
         </div>
-        <Button type="submit" name="register" class="sm:col-span-2 py-3 mt-8" data-testid="submit-button">
+        <Button type="submit" class="sm:col-span-2 py-3 mt-8 w-full" data-testid="submit-button" :loading="isLoading"
+          icon="pi pi-search">
           Register
         </Button>
       </Form>
