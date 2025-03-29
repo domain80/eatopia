@@ -10,9 +10,9 @@ import RadioButton from 'primevue/radiobutton';
 import InputMask from 'primevue/inputmask';
 import Message from 'primevue/message';
 
-import { useRegistration } from './registration.composable';
-import AuthLayout from './components/Auth.layout.vue';
-import { OnboardingService } from '../services/onboarding.service';
+import { useRegistration } from '../components/registration.composable';
+import AuthLayout from '../components/Auth.layout.vue';
+import { OnboardingService } from '../auth.service';
 
 const { resolver, handleSubmit, isLoading } = useRegistration();
 const onboardingService = OnboardingService.getInstance()
@@ -91,7 +91,7 @@ const onboardingService = OnboardingService.getInstance()
                 aria-label="Health Professional" />
               <label for="professional">Health Professional</label>
             </FormField>
-            <FormField class="flex items-center gap-2 col-span-1 sm:col-span-2">
+            <FormField class="flex items-center gap-2 col-span-1 sm:w-full">
               <RadioButton inputId="patient" name="role" value="patient" data-testid="role-patient"
                 aria-label="Patient" />
               <label for="patient">Patient</label>

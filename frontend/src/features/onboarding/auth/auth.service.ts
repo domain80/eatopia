@@ -3,14 +3,16 @@ import { ApiResponse } from '@/shared/models/apiResponse.model'
 import { useAuthStore } from '@/shared/stores/auth.store'
 import type { UserAccount } from '@/shared/models/userAccount.model'
 import type { ToastServiceMethods } from 'primevue'
-import type { RegistrationDto } from '../registration/dto/registration.dto'
-import type { TokenResponseDto } from '../registration/dto/tokenResponse.dto'
+import type { RegistrationDto } from './dto/registration.dto'
+import type { TokenResponseDto } from './dto/tokenResponse.dto'
 import router from '@/router'
 
 export class OnboardingService {
   private static instance: OnboardingService
   private readonly baseUrl: string
   private toast: ToastServiceMethods
+  // todo: use an auth interceptor to handle the token refresh and token injection
+  // todo: include refresh token in the token response
 
   private constructor(toast: ToastServiceMethods) {
     this.baseUrl = import.meta.env.VITE_WHOLISTIKA_BACKEND || ''
@@ -240,8 +242,6 @@ export class OnboardingService {
         },
       })
 
-      console.log({ response })
-
       const apiResponse = ApiResponse.fromResponse<TokenResponseDto>({
         statusCode: 200,
         message: 'Authorization successful',
@@ -262,7 +262,7 @@ export class OnboardingService {
           detail: "Let's set up your profile",
           life: 6000,
         })
-        router.push('/profile')
+        router.replace({ name: 'profile' })
 
         //todo: get user profile and save in auth store
 

@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import AuthLayout from '../registration/components/Auth.layout.vue';
+document.title = 'Wholistika | Profile'
 
+import DashboardLayout from './components/Dashboard.layout.vue';
 </script>
 
 <template>
-  <AuthLayout>
-    <main>
-      <p class="text-gray-500">This is me</p>
-      <h2 class="font-bold text-4xl">Profile</h2>
-    </main>
-  </AuthLayout>
+  <main>
+    <p class="text-gray-500">This is me</p>
+    <h2 class="font-bold text-4xl">Profile</h2>
+  </main>
 </template>

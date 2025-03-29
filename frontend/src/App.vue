@@ -1,7 +1,7 @@
 <script setup lang="ts">
 document.title = 'Wholistika';
 
-import { OnboardingService } from '@/features/onboarding/services/onboarding.service'
+import { OnboardingService } from '@/features/onboarding/auth/auth.service'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 import { onMounted } from 'vue'

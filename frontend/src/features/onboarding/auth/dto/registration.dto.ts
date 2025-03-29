@@ -5,5 +5,5 @@ export interface RegistrationDto {
   phoneNumber: string
   password: string
   confirmPassword: string
-  role: 'professional' | 'user'
+  role: 'professional' | 'patient'
 }

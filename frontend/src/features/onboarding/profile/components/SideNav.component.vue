@@ -1,0 +1,40 @@
+<script setup lang="ts">
+import NavItem from './NavItem.component.vue';
+
+const navItems = [
+  { routeName: 'home', icon: 'pi pi-home', label: 'Home' },
+  { routeName: 'search', icon: 'pi pi-search', label: 'Search' },
+  { routeName: 'messages', icon: 'pi pi-comments', label: 'Messages' },
+  { routeName: 'profile', icon: 'pi pi-user', label: 'Profile' },
+]
+</script>
+
+<template>
+  <aside
+    class="flex flex-col side-nav  w-[15%] border-r bg-[#ffffff4d] border-r-gray-200 drop-shadow-lg justify-between">
+    <div class=" w-11/12 mx-auto flex flex-col gap-4">
+      <header class="flex items-center gap-4 py-8 px-4">
+        <img src="/images/Logo.svg" alt="Wholistika" class="w-5 aspect-square" />
+        <h4 class="text-xl font-semibold">Wholistika</h4>
+      </header>
+
+      <nav class="flex flex-col gap-2">
+        <NavItem v-for="item in navItems" :key="item.routeName" :route-name="item.routeName" :label="item.label">
+          <template #icon>
+            <i :class="item.icon" class="text-lg ml-1"></i>
+          </template>
+        </NavItem>
+      </nav>
+    </div>
+
+    <footer class="flex flex-col gap-4 py-8 px-4 w-11/12 mx-auto">
+      <div class="flex items-center gap-4 text-gray-400">
+        <p class="text-sm font-medium">Help</p>
+        <p class="text-sm font-medium">Legal</p>
+        <p class="text-sm font-medium">FAQs</p>
+      </div>
+
+      <p class="text-sm text-gray-600">© domain80 2025</p>
+    </footer>
+  </aside>
+</template>

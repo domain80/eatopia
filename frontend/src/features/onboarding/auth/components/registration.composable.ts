@@ -1,8 +1,8 @@
 import { z } from 'zod'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import type { FormSubmitEvent } from '@primevue/forms'
-import { OnboardingService } from '../services/onboarding.service'
-import type { RegistrationDto } from './dto/registration.dto'
+import { OnboardingService } from '../auth.service'
+import type { RegistrationDto } from '../dto/registration.dto'
 import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { AxiosError } from 'axios'
@@ -41,7 +41,7 @@ const registrationSchema = z
     confirmPassword: z
       .string({ message: 'Confirm password is required' })
       .min(1, 'Please confirm password'),
-    role: z.enum(['professional', 'user'], {
+    role: z.enum(['professional', 'patient'], {
       required_error: 'Select a role',
     }),
   })
@@ -62,10 +62,8 @@ export const useRegistration = () => {
     try {
       isLoading.value = true
       const formData = e.values as RegistrationDto
-      const response = await onboardingService.register(formData)
-      console.log({ response })
-
-      onboardingService.login()
+      await onboardingService.register(formData)
+      await onboardingService.login()
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.add({
