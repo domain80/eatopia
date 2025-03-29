@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
 
+  // todo: move imports to a single file
   routes: [
     {
       path: '/',
@@ -13,6 +14,11 @@ const router = createRouter({
       path: '/authorized',
       name: 'authorized',
       component: () => import('@/features/onboarding/auth/views/Authorized.vue'),
+    },
+    {
+      path: '/profile-setup',
+      name: 'profile-setup',
+      component: () => import('../features/onboarding/profile/views/ProfileSetup.vue'),
     },
     {
       path: '/dashboard',

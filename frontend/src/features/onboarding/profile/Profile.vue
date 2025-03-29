@@ -2,6 +2,7 @@
 document.title = 'Wholistika | Profile'
 
 import DashboardLayout from './components/Dashboard.layout.vue';
+
 </script>
 
 <template>

@@ -6,6 +6,8 @@ import type { ToastServiceMethods } from 'primevue'
 import type { RegistrationDto } from './dto/registration.dto'
 import type { TokenResponseDto } from './dto/tokenResponse.dto'
 import router from '@/router'
+import { jwtDecode, type JwtPayload } from 'jwt-decode'
+import type { JwtDto as JwtCustomPayload } from './dto/jwt.dto'
 
 export class OnboardingService {
   private static instance: OnboardingService
@@ -262,6 +264,13 @@ export class OnboardingService {
           detail: "Let's set up your profile",
           life: 6000,
         })
+
+        // only go to profile if isNewUser in jwtClaim of access token is true
+        const jwtClaim = jwtDecode<JwtCustomPayload>(apiResponse.body.access_token)
+        if (jwtClaim && jwtClaim.isNewUser) {
+          router.replace({ name: 'profile-setup' })
+          return null
+        }
         router.replace({ name: 'profile' })
 
         //todo: get user profile and save in auth store
