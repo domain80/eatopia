@@ -46,6 +46,7 @@ public class UserAccountService implements UserDetailsService {
                 .email(registrationDto.getEmail())
                 .phoneNumber(registrationDto.getPhoneNumber())
                 .password(passwordEncoder.encode(registrationDto.getPassword()))
+                .isNewUser(true)
                 .role(UserRole.valueOf(registrationDto.getRole().toUpperCase()))
                 .build();
 
