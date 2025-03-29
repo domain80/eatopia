@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AuthLayout from '../components/Auth.layout.vue';
 import { useRoute } from 'vue-router';
-import { OnboardingService } from '../onboarding.serviceervice';
+import { OnboardingService } from '../../services/onboarding.service';
 import { onMounted } from 'vue';
 
 const route = useRoute();
