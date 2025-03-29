@@ -8,12 +8,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'register',
-      component: () => import('@/features/onboarding/auth/views/Registration.vue'),
+      component: () => import('../features/onboarding/auth/views/Registration.vue'),
     },
     {
       path: '/authorized',
       name: 'authorized',
-      component: () => import('@/features/onboarding/auth/views/Authorized.vue'),
+      component: () => import('../features/onboarding/auth/views/Authorized.vue'),
     },
     {
       path: '/profile-setup',
@@ -23,7 +23,7 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: () => import('@/features/onboarding/profile/components/Dashboard.layout.vue'),
+      component: () => import('../features/onboarding/profile/components/Dashboard.layout.vue'),
       children: [
         {
           path: 'home',

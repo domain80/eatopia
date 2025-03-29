@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
@@ -7,6 +7,11 @@ import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
 import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
+import { type ProfileSetupData } from '@/services/onboarding.service';
+
+const emit = defineEmits<{
+  'update:data': [data: ProfileSetupData['medicalInfo']]
+}>();
 
 const medicalInfo = ref({
   conditions: [] as Array<{
@@ -18,6 +23,10 @@ const medicalInfo = ref({
     summary: ''
   }
 });
+
+watch(() => medicalInfo.value.conditions, (newValue) => {
+  emit('update:data', { conditions: newValue });
+}, { deep: true });
 
 const activeIndex = ref('0');
 
@@ -38,7 +47,7 @@ const removeCondition = (index: number, event: Event) => {
 };
 
 defineProps<{
-  onNavigate: (direction: 'prev' | 'next') => void
+  onNavigate: (direction: 'prev' | 'next' | 'end') => void
 }>();
 </script>
 
@@ -60,7 +69,7 @@ defineProps<{
                 </div>
               </AccordionHeader>
               <AccordionContent>
-                <p class="m-0 text-gray-600">
+                <p class="m-0 text-gray-600 bg-transparent">
                   {{ condition.summary }}
                 </p>
               </AccordionContent>
@@ -88,7 +97,7 @@ defineProps<{
         <div class="flex justify-end gap-2">
           <Button label="Cancel" severity="secondary" text
             @click="medicalInfo.newCondition = { name: '', summary: '' }" />
-          <Button label="Add Info" @click="addMedicalCondition" />
+          <Button class="bg-gray-800" label="Add Info" @click="addMedicalCondition" />
         </div>
       </div>
     </div>
@@ -96,7 +105,7 @@ defineProps<{
     <!-- Navigation Buttons -->
     <div class="flex justify-between pt-6">
       <Button label="Previous" severity="secondary" icon="pi pi-arrow-left" @click="onNavigate('prev')" />
-      <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="onNavigate('next')" />
+      <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="onNavigate('end')" />
     </div>
   </div>
 </template>

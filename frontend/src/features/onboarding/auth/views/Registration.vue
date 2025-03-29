@@ -12,7 +12,7 @@ import Message from 'primevue/message';
 
 import { useRegistration } from '../components/registration.composable';
 import AuthLayout from '../components/Auth.layout.vue';
-import { OnboardingService } from '../auth.service';
+import { OnboardingService } from '@/services/onboarding.service';
 
 const { resolver, handleSubmit, isLoading } = useRegistration();
 const onboardingService = OnboardingService.getInstance()

@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import type { FormSubmitEvent } from '@primevue/forms'
-import { OnboardingService } from '../auth.service'
+import { OnboardingService } from '../../../../services/onboarding.service'
 import type { RegistrationDto } from '../dto/registration.dto'
 import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'

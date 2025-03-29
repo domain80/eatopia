@@ -3,11 +3,35 @@ import { ApiResponse } from '@/shared/models/apiResponse.model'
 import { useAuthStore } from '@/shared/stores/auth.store'
 import type { UserAccount } from '@/shared/models/userAccount.model'
 import type { ToastServiceMethods } from 'primevue'
-import type { RegistrationDto } from './dto/registration.dto'
-import type { TokenResponseDto } from './dto/tokenResponse.dto'
+import type { RegistrationDto } from '../features/onboarding/auth/dto/registration.dto'
+import type { TokenResponseDto } from '../features/onboarding/auth/dto/tokenResponse.dto'
 import router from '@/router'
 import { jwtDecode, type JwtPayload } from 'jwt-decode'
-import type { JwtDto as JwtCustomPayload } from './dto/jwt.dto'
+import type { JwtCustomPayload } from '../features/onboarding/auth/dto/jwt.dto'
+import { useRouter } from 'vue-router'
+
+export interface ProfileSetupData {
+  basicProfile: {
+    title: string
+    interests: string[]
+    aboutYou: string
+    imagePreview: string
+  }
+  professionalInfo?: {
+    title: string
+    where: string
+    startDate: Date | null
+    endDate: Date | null
+    currentlyWork: boolean
+    jobSummary: string
+  }
+  medicalInfo?: {
+    conditions: Array<{
+      name: string
+      summary: string
+    }>
+  }
+}
 
 export class OnboardingService {
   private static instance: OnboardingService
@@ -297,5 +321,10 @@ export class OnboardingService {
       }
       return null
     }
+  }
+
+  public async submitProfileSetup(profileData: ProfileSetupData) {
+    // Log the data
+    console.log('Profile Setup Data:', profileData)
   }
 }
