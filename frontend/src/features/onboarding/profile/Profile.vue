@@ -109,7 +109,7 @@ const events = ref([
     </PageHeaderShared>
 
     <div class="px-20 grid gap-12">
-      <ProfileHeader v-bind="profileData" summarized />
+      <ProfileHeader v-bind="profileData" />
       <div class="">
         <Tabs value="1" class="">
           <TabList class="bg-transparent" :pt="{
