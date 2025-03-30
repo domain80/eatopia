@@ -46,22 +46,6 @@ export const WholistikaThemePreset = definePreset(Aura, {
         },
       },
     },
-    components: {
-      inputtext: {
-        colorScheme: {
-          light: {
-            root: {
-              placeholderColor: '{surface.300}',
-            },
-          },
-          dark: {
-            root: {
-              placeholderColor: '{surface.700}',
-            },
-          },
-        },
-      },
-    },
   },
 
   components: {

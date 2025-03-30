@@ -33,7 +33,7 @@ const router = createRouter({
         {
           path: 'search',
           name: 'search',
-          component: () => import('@/features/onboarding/profile/components/DefaultRoute.vue'),
+          component: () => import('../features/search/Search.vue'),
         },
         {
           path: 'messages',

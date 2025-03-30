@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import ProfileHeader from './components/ProfileHeader.vue';
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
+import { Timeline } from 'primevue';
+import PageHeaderShared from '../../../shared/components/PageHeader.shared.vue'
 
 document.title = 'Wholistika | Profile';
 
 const profileData = ref({
-  name: 'Dr. Ama Mansah',
-  title: 'Verified Dietitian',
+  name: ' Ama Mansah',
+  title: 'Dr.',
+  job: 'Dietitian',
+  verified: false,
   followers: 32,
   location: 'Accra, Ghana',
   socialLinks: {
@@ -46,6 +55,7 @@ const experiences = ref([
       'Worked with personal trainers to align fitness and dietary plans.'
     ]
   },
+
   {
     company: 'Local Community Health Program',
     title: 'Volunteer Nutrition Consultant',
@@ -58,7 +68,17 @@ const experiences = ref([
       'Provided basic diet consultations for individuals looking to improve their nutrition.',
       'Helped organize fitness and wellness events for the community.'
     ]
+  },
+  {
+    company: '',
+    title: '',
+    dateRange: {
+      from: '',
+      to: ''
+    },
+    responsibilities: []
   }
+
 ]);
 
 const activeTab = ref(0);
@@ -83,14 +103,68 @@ const events = ref([
 </script>
 
 <template>
-  <main class=" bg-[#ffffff89] min-h-screen">
-    <div class="w-full py-4 px-20 border-b border-b-gray-200 mb-8">
+  <main class=" bg-white/60 min-h-screen pb-8">
+    <PageHeaderShared>
+      <h1 class="text-xl font-bold">Profile</h1>
+    </PageHeaderShared>
 
-      <header class="">
-        <h1 class="text-xl font-bold">Profile</h1>
-      </header>
+    <div class="px-20 grid gap-12">
+      <ProfileHeader v-bind="profileData" summarized />
+      <div class="">
+        <Tabs value="1" class="">
+          <TabList class="bg-transparent" :pt="{
+            tabList: {
+              class: 'bg-transparent',
+            }
+          }">
+            <Tab value="1" class="">Profile</Tab>
+            <Tab value="2" class="">Posts</Tab>
+          </TabList>
+          <TabPanels class="bg-transparent p-0 pt-4 ">
+            <TabPanel value="1" class="grid content-start">
+              <Timeline :value="experiences" class="mr-auto mt-4 " :pt="{
+                eventOpposite: {
+                  class: 'flex-1',
+                },
+                eventContent: {
+                  class: 'flex-5',
+                }
+              }">
+                <template #opposite="slotProps">
+                  <div class="text-sm">
+                    <p class="text-surface-500 dark:text-surface-400">{{ slotProps.item.dateRange.from }}</p>
+                    <p class="text-surface-500 dark:text-surface-400" v-if="slotProps.item.dateRange.to != ''">to
+                    </p>
+                    <p class="text-surface-500 dark:text-surface-400">{{ slotProps.item.dateRange.to }}</p>
+                  </div>
+                </template>
+                <template #content="slotProps">
+                  <div class="pb-8">
+                    <header>
+                      <h3> {{ slotProps.item.title }} </h3>
+                    </header>
+
+                    <ul class="grid gap-2 list-disc">
+                      <li v-for="(responsibility, index) in slotProps.item.responsibilities" :key="index"
+                        class="text-surface-600 dark:text-surface-400 ml-4">
+                        {{ responsibility }}
+                      </li>
+                    </ul>
+                  </div>
+                </template>
+              </Timeline>
+            </TabPanel>
+
+            <TabPanel value="2">
+              <div class="grid items-center justify-center py-20">
+                <p class=""> Comming soon</p>
+              </div>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </div>
+
     </div>
-    <ProfileHeader v-bind="profileData" />
 
   </main>
 </template>
