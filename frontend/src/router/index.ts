@@ -38,7 +38,7 @@ const router = createRouter({
         {
           path: 'messages',
           name: 'messages',
-          component: () => import('@/features/onboarding/profile/components/DefaultRoute.vue'),
+          component: () => import('@/features/messaging/Messaging.vue'),
         },
         {
           path: 'profile',
