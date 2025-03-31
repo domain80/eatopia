@@ -12,7 +12,7 @@ import UserChatBubble from './components/UserChatBubble.component.vue'
 
     <div class="h-max">
       <PageHeaderShared>
-        <h1 class="text-xl font-bold">Messages</h1>
+        <h1 class="text-lg font-medium">Messages</h1>
       </PageHeaderShared>
     </div>
 

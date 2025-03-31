@@ -23,12 +23,12 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: () => import('../features/onboarding/profile/components/Dashboard.layout.vue'),
+      component: () => import('@/shared/components/DashboardLayout.shared.vue'),
       children: [
         {
           path: 'home',
           name: 'home',
-          component: () => import('@/features/onboarding/profile/components/DefaultRoute.vue'),
+          component: () => import('@/shared/views/DefaultRoute.shared.vue'),
         },
         {
           path: 'search',

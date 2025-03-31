@@ -8,7 +8,7 @@ import Image from 'primevue/image';
 import { Select, InputText } from 'primevue';
 import { useTemplateRef } from 'vue';
 import { defineEmits } from 'vue';
-import { type ProfileSetupData } from '../../services/onboarding.service';
+import type { ProfileSetupData } from '@/services/onboarding.service';
 import Message from 'primevue/message';
 import { z } from 'zod';
 import { zodResolver } from '@primevue/forms/resolvers/zod';

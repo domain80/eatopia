@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SideNav from './SideNav.component.vue';
+import SideNav from './SideNav.shared.vue';
 import { RouterView } from 'vue-router';
 </script>
 

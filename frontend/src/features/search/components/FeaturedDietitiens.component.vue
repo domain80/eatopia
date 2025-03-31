@@ -142,7 +142,7 @@ const data = ref({
 </script>
 
 <template>
-  <div class=" max-w-4xl ">
+  <div class=" max-w-5xl ">
     <section class="mb-10 ">
       <h2 class="text-xl md:text-2xl mb-5">Featured Dietitians</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

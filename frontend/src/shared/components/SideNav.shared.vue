@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NavItem from './NavItem.component.vue';
+import NavItem from './NavItem.shared.vue';
 
 const navItems = [
   { routeName: 'home', icon: 'pi pi-home', label: 'Home' },
@@ -13,9 +13,9 @@ const navItems = [
   <aside
     class="flex flex-col sticky top-0 h-screen w-[15%] border-r bg-[#ffffff4d] border-r-gray-200 drop-shadow-lg justify-between">
     <div class=" w-full mx-auto flex flex-col gap-8">
-      <header class=" min-h-16 flex items-center gap-4 py-4 px-9 border-b border-b-gray-200">
-        <img src="/images/Logo.svg" alt="Wholistika" class="w-5 aspect-square" />
-        <h4 class="text-xl font-semibold">Wholistika</h4>
+      <header class=" min-h-14 flex items-center gap-4 py-2 px-9 border-b border-b-gray-200">
+        <img src="/images/Logo.svg" alt="Wholistika" class="w-6 aspect-square" />
+        <h4 class="text-lg font-medium">Wholistika</h4>
       </header>
 
       <nav class="flex flex-col gap-2 px-4">

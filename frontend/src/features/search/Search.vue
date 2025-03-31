@@ -32,7 +32,7 @@ const profileData = ref({
 <template>
   <main class=" bg-white/60 min-h-screen pb-8">
     <PageHeaderShared>
-      <h1 class="text-xl font-bold">Search</h1>
+      <h1 class="text-lg font-medium">Search</h1>
     </PageHeaderShared>
 
 
