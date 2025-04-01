@@ -10,11 +10,9 @@ import UserChatBubble from './components/UserChatBubble.component.vue'
 
   <main class="bg-white/20 flex flex-col h-screen">
 
-    <div class="h-max">
-      <PageHeaderShared>
-        <h1 class="text-lg font-medium">Messages</h1>
-      </PageHeaderShared>
-    </div>
+    <PageHeaderShared>
+      <h1 class="text-lg font-medium">Messages</h1>
+    </PageHeaderShared>
 
     <div class=" grid grid-cols-5 divide-x-1 divide-gray-200 -mt-8 h-full flex-1 ">
 

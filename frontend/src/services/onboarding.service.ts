@@ -1,37 +1,17 @@
-import axios, { AxiosError } from 'axios'
+import router from '@/router'
 import { ApiResponse } from '@/shared/models/apiResponse.model'
-import { useAuthStore } from '@/shared/stores/auth.store'
+import type { ProfileSetupData } from '@/shared/models/ProfileSetup.model'
 import type { UserAccount } from '@/shared/models/userAccount.model'
+import { useAuthStore } from '@/shared/stores/auth.store'
+import axios, { AxiosError } from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import type { ToastServiceMethods } from 'primevue'
+import type { JwtCustomPayload } from '../features/onboarding/auth/dto/jwt.dto'
 import type { RegistrationDto } from '../features/onboarding/auth/dto/registration.dto'
 import type { TokenResponseDto } from '../features/onboarding/auth/dto/tokenResponse.dto'
-import router from '@/router'
-import { jwtDecode, type JwtPayload } from 'jwt-decode'
-import type { JwtCustomPayload } from '../features/onboarding/auth/dto/jwt.dto'
-import { useRouter } from 'vue-router'
-
-export interface ProfileSetupData {
-  basicProfile: {
-    title: string
-    interests: string[]
-    aboutYou: string
-    imagePreview: string
-  }
-  professionalInfo?: {
-    title: string
-    where: string
-    startDate: Date | null
-    endDate: Date | null
-    currentlyWork: boolean
-    jobSummary: string
-  }
-  medicalInfo?: {
-    conditions: Array<{
-      name: string
-      summary: string
-    }>
-  }
-}
+import { ApiError } from '@/shared/models/apiError.model'
+import { UserAccountDto } from '@/features/onboarding/auth/dto/userAccount.dto'
+import { Mapper } from '@/shared/utils/mapper'
 
 export class OnboardingService {
   private static instance: OnboardingService
@@ -95,7 +75,11 @@ export class OnboardingService {
 
       if (apiResponse.isSuccess() && apiResponse.body) {
         const authStore = useAuthStore()
-        authStore.setAccessToken(apiResponse.body.access_token, apiResponse.body.expires_in)
+        authStore.setAccessToken({
+          token: apiResponse.body.access_token,
+          refreshToken: apiResponse.body.refresh_token || '',
+          expiresIn: apiResponse.body.expires_in,
+        })
       }
 
       return apiResponse.body!
@@ -233,6 +217,63 @@ export class OnboardingService {
     return null
   }
 
+  public async logout() {
+    const authStore = useAuthStore()
+    authStore.clearTokens()
+
+    const codeVerifier = this.generateCodeVerifier()
+    const codeChallenge = await this.generateCodeChallenge(codeVerifier)
+
+    // Encrypt values before storing
+    // Import key from environment variable
+    const keyData = Uint8Array.from(atob(import.meta.env.VITE_ENCRYPTION_KEY), (c) =>
+      c.charCodeAt(0),
+    )
+    const key = await crypto.subtle.importKey('raw', keyData, 'AES-GCM', false, ['encrypt'])
+
+    // Generate Initialization Vectors (IVs) - random values used to ensure
+    // that encrypted data remains unique even when encrypting the same input multiple times
+    const verifierIv = crypto.getRandomValues(new Uint8Array(12))
+    const challengeIv = crypto.getRandomValues(new Uint8Array(12))
+
+    // Store IVs in localStorage
+    localStorage.setItem('code_verifier_iv', btoa(String.fromCharCode(...verifierIv)))
+    localStorage.setItem('code_challenge_iv', btoa(String.fromCharCode(...challengeIv)))
+
+    const encryptedVerifier = await crypto.subtle.encrypt(
+      { name: 'AES-GCM', iv: verifierIv },
+      key,
+      new TextEncoder().encode(codeVerifier),
+    )
+
+    const encryptedChallenge = await crypto.subtle.encrypt(
+      { name: 'AES-GCM', iv: challengeIv },
+      key,
+      new TextEncoder().encode(codeChallenge),
+    )
+
+    // Store encrypted values
+    localStorage.setItem(
+      'code_verifier',
+      btoa(String.fromCharCode(...new Uint8Array(encryptedVerifier))),
+    )
+    localStorage.setItem(
+      'code_challenge',
+      btoa(String.fromCharCode(...new Uint8Array(encryptedChallenge))),
+    )
+
+    const params = new URLSearchParams({
+      response_type: 'code',
+      client_id: import.meta.env.VITE_CLIENT_ID,
+      scope: import.meta.env.VITE_CLIENT_SCOPE,
+      redirect_uri: 'http://localhost:5173',
+      code_challenge: codeChallenge,
+      code_challenge_method: 'S256',
+    })
+
+    window.location.href = `${this.baseUrl}/logout?${params.toString()}`
+  }
+
   public async handleAuthorizationCode(code: string): Promise<UserAccount | null> {
     try {
       // Import key from environment variable for decryption
@@ -281,7 +322,11 @@ export class OnboardingService {
 
       if (apiResponse.isSuccess() && apiResponse.body) {
         const authStore = useAuthStore()
-        authStore.setAccessToken(apiResponse.body.access_token, apiResponse.body.expires_in)
+        authStore.setAccessToken({
+          token: apiResponse.body.access_token,
+          refreshToken: apiResponse.body.refresh_token || '',
+          expiresIn: apiResponse.body.expires_in,
+        })
         this.toast.add({
           severity: 'success',
           summary: 'Authorization successful',
@@ -324,7 +369,37 @@ export class OnboardingService {
   }
 
   public async submitProfileSetup(profileData: ProfileSetupData) {
-    // Log the data
-    console.log('Profile Setup Data:', profileData)
+    console.log({ profileData })
+    try {
+      const response = await axios.put(`${this.baseUrl}/api/auth/setup-profile`, profileData, {
+        headers: {
+          Authorization: `Bearer ${useAuthStore().getAccessToken}`,
+        },
+      })
+      this.toast.add({
+        severity: 'success',
+        summary: 'Profile setup successful',
+        detail: 'Profile setup successful',
+        life: 6000,
+      })
+      return Mapper.map(response.data, UserAccountDto)
+    } catch (error) {
+      this.toast.add({
+        severity: 'error',
+        summary: 'Profile setup failed',
+        detail: 'Failed to setup profile',
+        life: 6000,
+      })
+      console.error(error)
+
+      if (error instanceof AxiosError) {
+        throw new ApiError(
+          error.response?.data?.message || 'Failed to setup profile',
+          error.response?.status || 500,
+          error.response?.data?.errors || [],
+        )
+      }
+      throw error
+    }
   }
 }

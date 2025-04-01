@@ -4,3 +4,8 @@ spring:
     username: whol1st1ka-bak
     password: whol1st1k@.nta
     driverClassName: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+frontend:
+  url: http://localhost:5173

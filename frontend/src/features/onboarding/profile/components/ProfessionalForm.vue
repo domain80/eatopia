@@ -8,21 +8,23 @@ import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { z } from 'zod';
-import { type ProfileSetupData } from '@/services/onboarding.service';
+import type { ProfileSetupData } from '@/shared/models/ProfileSetup.model';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
+import DatePicker from 'primevue/datepicker';
+import type { WorkExperience } from '@/shared/models/ProfileSetup.model';
 
 const emit = defineEmits<{
-  'update:data': [data: ProfileSetupData['professionalInfo']]
+  'update:data': [data: ProfileSetupData['workExperiences']]
 }>();
 
-const workExperience = ref({
+const workExperiences = ref<ProfileSetupData['workExperiences']>([{
   title: '',
   where: '',
   startDate: null,
   endDate: null,
   currentlyWork: false,
   jobSummary: ''
-});
+}]);
 
 // Form validation schema
 const resolver = zodResolver(z.object({
@@ -50,7 +52,7 @@ const resolver = zodResolver(z.object({
   }
 ));
 
-watch(workExperience, (newValue) => {
+watch(workExperiences, (newValue) => {
   emit('update:data', newValue);
 }, { deep: true });
 
@@ -59,14 +61,16 @@ const props = defineProps<{
 }>();
 
 const handleSubmit = (event: FormSubmitEvent) => {
-  if (event.valid) {
-    props.onNavigate('end');
+  if (!event.valid) {
+    return
   }
+  emit('update:data', [event.values] as ProfileSetupData['workExperiences'])
+  props.onNavigate('end');
 };
 </script>
 
 <template>
-  <div class="flex flex-col space-y-6 p-4">
+  <div class="flex flex-col space-y-6 ">
     <h1 class="text-2xl font-semibold text-gray-700">Add one work experience</h1>
 
     <Form v-slot="$form" :resolver="resolver" @submit="handleSubmit" validate-on-blur :validate-on-value-update="false"
@@ -74,37 +78,38 @@ const handleSubmit = (event: FormSubmitEvent) => {
       <!-- Title -->
       <FormField class="flex flex-col gap-2" name="title">
         <label class="font-medium">Title</label>
-        <InputText v-model="workExperience.title" class="w-full" />
-        <Message v-if="$form.title?.invalid" severity="error" size="small">{{ $form.title.error.message }}</Message>
+        <InputText name="title" class="w-full" />
+        <Message v-if="$form.title?.invalid" severity="error" size="small" variant="simple">{{ $form.title.error.message
+        }}</Message>
       </FormField>
 
       <!-- Where -->
       <FormField class="flex flex-col gap-2" name="where">
         <label class="font-medium">Where</label>
-        <InputText v-model="workExperience.where" class="w-full" />
+        <InputText name="where" class="w-full" />
         <Message v-if="$form.where?.invalid" severity="error" size="small">{{ $form.where.error.message }}</Message>
       </FormField>
 
       <!-- Working Period -->
       <div class="flex flex-col gap-2">
         <label class="font-medium">Working Period</label>
-        <div class="flex gap-4 items-center">
-          <FormField class="flex-1" name="startDate">
-            <Calendar v-model="workExperience.startDate" view="month" dateFormat="MM yy" placeholder="Start Period"
+        <div class="flex gap-4 items-start">
+          <FormField class="flex-1 space-y-2" name="startDate">
+            <DatePicker name="startDate" view="month" dateFormat="MM yy" placeholder="Start Period" fluid
               class="w-full" />
             <Message v-if="$form.startDate?.invalid" severity="error" size="small">{{ $form.startDate.error.message }}
             </Message>
           </FormField>
-          <FormField class="flex-1" name="endDate">
-            <Calendar v-model="workExperience.endDate" view="month" dateFormat="MM yy" placeholder="End Period"
-              :disabled="workExperience.currentlyWork" class="w-full" />
+          <FormField class="flex-1 space-y-2" name="endDate">
+            <Calendar name="endDate" view="month" dateFormat="MM yy" placeholder="End Period"
+              :disabled="$form.currentlyWork?.value" class="w-full" />
             <Message v-if="$form.endDate?.invalid" severity="error" size="small">{{ $form.endDate.error.message }}
             </Message>
           </FormField>
         </div>
         <div class="flex items-center gap-2">
-          <Checkbox v-model="workExperience.currentlyWork" :binary="true" />
-          <label>I currently work here</label>
+          <Checkbox name="currentlyWork" :binary="true" input-id="currentlyWork" />
+          <label for="currentlyWork">I currently work here</label>
         </div>
       </div>
 
@@ -114,8 +119,7 @@ const handleSubmit = (event: FormSubmitEvent) => {
           <label class="font-medium">Job Summary</label>
           <span class="text-sm text-gray-500">80 words max</span>
         </div>
-        <Textarea v-model="workExperience.jobSummary" placeholder="Tell others what how you can help them" rows="4"
-          class="w-full" />
+        <Textarea name="jobSummary" placeholder="Tell others what how you can help them" rows="4" class="w-full" />
         <Message v-if="$form.jobSummary?.invalid" severity="error" size="small">{{ $form.jobSummary.error.message }}
         </Message>
       </FormField>

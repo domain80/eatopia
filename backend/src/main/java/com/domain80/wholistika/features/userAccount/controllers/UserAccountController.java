@@ -1,5 +1,6 @@
 package com.domain80.wholistika.features.userAccount.controllers;
 
+import com.domain80.wholistika.features.userAccount.dto.ProfileSetupDto;
 import com.domain80.wholistika.features.userAccount.dto.RegistrationDto;
 import com.domain80.wholistika.features.userAccount.dto.UserAccountDto;
 import com.domain80.wholistika.features.userAccount.models.UserAccount;
@@ -7,6 +8,8 @@ import com.domain80.wholistika.features.userAccount.services.UserAccountService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,7 +32,18 @@ public class UserAccountController {
     @PostMapping("/register")
     public UserAccountDto register(@Valid @RequestBody RegistrationDto dto) {
         UserAccount newUserAccount = userAccountService.register(dto);
-        UserAccountDto newAccountDto = modelMapper.map(newUserAccount, UserAccountDto.class);
-        return newAccountDto;
+        return modelMapper.map(newUserAccount, UserAccountDto.class);
+    }
+
+    @PutMapping("/setup-profile")
+    public UserAccountDto setupUserProfile(@RequestBody ProfileSetupDto dto) {
+        UserAccount updatedUser = userAccountService.setupProfile(dto);
+        return modelMapper.map(updatedUser, UserAccountDto.class);
+    }
+
+    @GetMapping("/whoami")
+    public UserAccount whoami( Authentication authentication) {
+        UserAccount principal = (UserAccount) authentication.getPrincipal();
+        return userAccountService.findUserAccountByEmail(principal.getEmail());
     }
 }

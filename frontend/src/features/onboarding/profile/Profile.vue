@@ -104,6 +104,7 @@ const events = ref([
 
 <template>
   <main class=" bg-white/60 min-h-screen pb-8">
+
     <PageHeaderShared>
       <h1 class="text-lg font-medium">Profile</h1>
     </PageHeaderShared>

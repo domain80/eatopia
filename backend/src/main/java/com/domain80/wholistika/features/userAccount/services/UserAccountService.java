@@ -1,5 +1,6 @@
 package com.domain80.wholistika.features.userAccount.services;
 
+import com.domain80.wholistika.features.userAccount.dto.ProfileSetupDto;
 import com.domain80.wholistika.features.userAccount.dto.RegistrationDto;
 import com.domain80.wholistika.features.userAccount.models.UserAccount;
 import com.domain80.wholistika.features.userAccount.models.UserRole;
@@ -12,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserAccountService implements UserDetailsService {
 
@@ -19,8 +22,26 @@ public class UserAccountService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     public UserAccountService(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder) {
+        UserAccount sampleUser = UserAccount.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .email("i@m.me")
+                .phoneNumber("+1234567890")
+                .password(passwordEncoder.encode("password"))
+                .role(UserRole.USER)
+                .isNewUser(false)
+                .title("Mr.")
+                .jobTitle("Software Engineer")
+                .interests("Coding, AI, Open Source")
+                .about("Passionate developer with a love for problem-solving.")
+                .imageData("base64EncodedImageString")
+                .build();
+
+        userAccountRepository.save(sampleUser);
+
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
+
     }
 
     @Override
@@ -51,5 +72,46 @@ public class UserAccountService implements UserDetailsService {
                 .build();
 
         return userAccountRepository.save(userAccount);
+    }
+
+    public UserAccount setupProfile(ProfileSetupDto dto) {
+        // Fetch user account by email
+        UserAccount userAccount = userAccountRepository.findByEmail(dto.getUserAccountId())
+                .orElseThrow(() -> CustomException.builder()
+                        .message("No such user found")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        // Update basic profile details
+        userAccount.setTitle(dto.getTitle());
+        userAccount.setJobTitle(dto.getJobTitle());
+        userAccount.setInterests(dto.getInterests());
+        userAccount.setAbout(dto.getAbout());
+        userAccount.setImageData(dto.getImageData());
+
+        // Update medical conditions
+        if (dto.getMedicalInfo() != null) {
+            dto.getMedicalInfo().forEach(condition -> condition.setUserAccount(userAccount));
+            userAccount.setMedicalConditions(dto.getMedicalInfo());
+        }
+
+        // Update work experiences
+        if (dto.getWorkExperiences() != null) {
+            dto.getWorkExperiences().forEach(experience -> experience.setUserAccount(userAccount));
+            userAccount.setWorkExperiences(dto.getWorkExperiences());
+        }
+
+        userAccount.setIsNewUser(false);
+
+        // Save and return updated user
+        return userAccountRepository.save(userAccount);
+    }
+
+    public UserAccount findUserAccountByEmail(String email) {
+        Optional<UserAccount>  _userAccount =  userAccountRepository.findByEmail(email);
+        if (_userAccount.isEmpty()) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+        return _userAccount.get();
     }
 }

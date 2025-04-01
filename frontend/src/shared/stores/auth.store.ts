@@ -1,14 +1,17 @@
 import { defineStore } from 'pinia'
+import { useLocalStorage, type RemovableRef } from '@vueuse/core'
 
 interface AuthState {
-  accessToken: string | null
-  expiryTimestamp: number | null
+  accessToken: RemovableRef<string | null>
+  refreshToken: RemovableRef<string | null>
+  expiryTimestamp: RemovableRef<number | null>
 }
 
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
-    accessToken: null,
-    expiryTimestamp: null,
+    accessToken: useLocalStorage('pinia/auth/accessToken', null),
+    refreshToken: useLocalStorage('pinia/auth/refreshToken', null),
+    expiryTimestamp: useLocalStorage('pinia/auth/expiryTimestamp', null),
   }),
 
   getters: {
@@ -18,13 +21,23 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    setAccessToken(token: string, expiresIn: number) {
+    setAccessToken({
+      token,
+      refreshToken,
+      expiresIn,
+    }: {
+      token: string
+      refreshToken: string
+      expiresIn: number
+    }) {
       this.accessToken = token
+      this.refreshToken = refreshToken
       this.expiryTimestamp = Date.now() + expiresIn * 1000
     },
 
-    clearAccessToken() {
+    clearTokens() {
       this.accessToken = null
+      this.refreshToken = null
       this.expiryTimestamp = null
     },
   },

@@ -13,7 +13,7 @@ const navItems = [
   <aside
     class="flex flex-col sticky top-0 h-screen w-[15%] border-r bg-[#ffffff4d] border-r-gray-200 drop-shadow-lg justify-between">
     <div class=" w-full mx-auto flex flex-col gap-8">
-      <header class=" min-h-14 flex items-center gap-4 py-2 px-9 border-b border-b-gray-200">
+      <header class=" min-h-12 flex items-center gap-4 py-2 px-9 border-b border-b-gray-200">
         <img src="/images/Logo.svg" alt="Wholistika" class="w-6 aspect-square" />
         <h4 class="text-lg font-medium">Wholistika</h4>
       </header>

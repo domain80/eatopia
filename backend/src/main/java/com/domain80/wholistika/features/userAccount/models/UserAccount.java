@@ -21,6 +21,19 @@ import java.util.List;
 @AllArgsConstructor
 public class UserAccount implements UserDetails {
 
+    public UserAccount() { }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(role);
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -52,15 +65,27 @@ public class UserAccount implements UserDetails {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public UserAccount() { }
+    // basic profile
+    @Column()
+    private String title;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(role);
-    }
+    @Column()
+    private String jobTitle;
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
+    @Column()
+    private String interests;
+
+    @Column()
+    private String about;
+
+    @Column()
+    private String imageData;
+
+
+    @OneToMany(mappedBy = "userAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<MedicalCondition> medicalConditions;
+
+    @OneToMany(mappedBy = "userAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<WorkExperience> workExperiences;
+
 }
