@@ -9,8 +9,12 @@ import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -42,8 +46,8 @@ public class UserAccountController {
     }
 
     @GetMapping("/whoami")
-    public UserAccount whoami( Authentication authentication) {
-        UserAccount principal = (UserAccount) authentication.getPrincipal();
-        return userAccountService.findUserAccountByEmail(principal.getEmail());
+    public  UserAccount  whoAmI(Principal principal) {
+        UserAccount user = userAccountService.findUserAccountByEmail(principal.getName());
+        return (user);
     }
 }

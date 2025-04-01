@@ -382,7 +382,7 @@ export class OnboardingService {
         detail: 'Profile setup successful',
         life: 6000,
       })
-      return Mapper.map(response.data, UserAccountDto)
+      return Mapper.map(response.data.body, UserAccountDto)
     } catch (error) {
       this.toast.add({
         severity: 'error',
@@ -395,6 +395,27 @@ export class OnboardingService {
       if (error instanceof AxiosError) {
         throw new ApiError(
           error.response?.data?.message || 'Failed to setup profile',
+          error.response?.status || 500,
+          error.response?.data?.errors || [],
+        )
+      }
+      throw error
+    }
+  }
+
+  public async getWhoami(): Promise<UserAccountDto | null> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/api/auth/whoami`, {
+        headers: {
+          Authorization: `Bearer ${useAuthStore().getAccessToken}`,
+        },
+      })
+      console.log({ response })
+      return Mapper.map(response.data.body, UserAccountDto)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new ApiError(
+          error.response?.data?.message || 'Failed to get user profile',
           error.response?.status || 500,
           error.response?.data?.errors || [],
         )

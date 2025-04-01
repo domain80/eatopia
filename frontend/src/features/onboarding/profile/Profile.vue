@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import ProfileHeader from './components/ProfileHeader.vue';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
@@ -8,23 +8,47 @@ import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
 import { Timeline } from 'primevue';
 import PageHeaderShared from '../../../shared/components/PageHeader.shared.vue'
+import { OnboardingService } from '@/services/onboarding.service'
+import { useToast } from 'primevue/usetoast'
+import type { UserAccountDto } from '../auth/dto/userAccount.dto';
 
 document.title = 'Wholistika | Profile';
 
-const profileData = ref({
-  name: ' Ama Mansah',
-  title: 'Dr.',
-  job: 'Dietitian',
-  verified: false,
-  followers: 32,
-  location: 'Accra, Ghana',
-  socialLinks: {
-    instagram: '@doc_mansah',
-    facebook: '@doc_mansah'
-  },
-  tags: ['fitness', 'weight-loss', 'diet plans', 'healthy habits'],
-  description: 'I help young adults achieve their fitness and weight loss goals using tried and proven 2-5 month plans tailored to the individual.'
-});
+const toast = useToast()
+const onboardingService = OnboardingService.getInstance()
+
+onMounted(async () => {
+  try {
+    const userData = await onboardingService.getWhoami()
+    console.log('Profile Data:', userData)
+
+    if (userData) {
+      profileData.value = {
+        id: userData.id,
+        email: userData.email,
+        firstName: userData.firstName || '',
+        lastName: userData.lastName || '',
+        title: userData.title || '',
+        jobTitle: userData.jobTitle || '',
+        interests: userData.interests || '',
+        about: userData.about || '',
+        imageData: userData.imageData || '',
+        medicalInfo: userData.medicalInfo || [],
+        workExperiences: userData.workExperiences || [],
+      }
+    }
+  } catch (error) {
+    console.error('Failed to fetch profile data:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to load profile data',
+      life: 3000,
+    })
+  }
+})
+
+const profileData = ref<UserAccountDto>({} as UserAccountDto);
 
 const experiences = ref([
   {
@@ -110,7 +134,7 @@ const events = ref([
     </PageHeaderShared>
 
     <div class="px-20 grid gap-12">
-      <ProfileHeader v-bind="profileData" />
+      <ProfileHeader v-bind="profileData" :summarized="false" :isYou="true" />
       <div class="">
         <Tabs value="1" class="">
           <TabList class="bg-transparent" :pt="{
