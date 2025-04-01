@@ -6,6 +6,10 @@ import com.domain80.wholistika.features.userAccount.models.UserAccount;
 import com.domain80.wholistika.features.userAccount.models.UserRole;
 import com.domain80.wholistika.features.userAccount.repo.UserAccountRepository;
 import com.domain80.wholistika.utils.CustomException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -114,4 +119,20 @@ public class UserAccountService implements UserDetailsService {
         }
         return _userAccount.get();
     }
+
+
+    public Page<UserAccount> searchUsers(String query, String role, LocalDate createdAfter, LocalDate createdBefore,
+                                         int page, int size, String sortBy, String direction) {
+        Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return userAccountRepository.searchByFilters(
+                query != null ? query.toLowerCase() : null,
+                role != null ? role.toUpperCase() : null,
+                createdAfter,
+                createdBefore,
+                pageable
+        );
+    }
+
 }
