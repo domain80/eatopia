@@ -8,7 +8,7 @@ import router from './router'
 
 import PrimeVue from 'primevue/config'
 import { ToastService } from 'primevue'
-import { WholistikaThemePreset } from './shared/wholistika.theme'
+import { EatopiaThemePreset } from '@/shared/eatopia.theme.ts'
 
 const app = createApp(App)
 
@@ -17,9 +17,9 @@ app.use(ToastService)
 app.use(router)
 app.use(PrimeVue, {
   theme: {
-    preset: WholistikaThemePreset,
+    preset: EatopiaThemePreset,
     options: {
-      darkModeSelector: '.wholistika-dark-mode',
+      darkModeSelector: '.eatopia-dark-mode',
       cssLayer: {
         name: 'primevue',
         order: 'theme, base, primevue',

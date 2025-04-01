@@ -5,6 +5,7 @@ import FeaturedDietitianCard from './FeaturedDietitianCard.component.vue';
 import RegularDietitianCard from './RegularUserCard.component.vue';
 import ProfileHeader from '@/features/onboarding/profile/components/ProfileHeader.vue';
 import { Card } from 'primevue';
+import type { IUserAccountDto } from '@/features/onboarding/auth/dto/userAccount.dto';
 
 const data = ref({
   trendingKeywords: [
@@ -41,101 +42,65 @@ const data = ref({
   regularDietitians: [
     {
       id: 4,
-      name: 'Mr. Bob Barley',
+      email: 'mr.bobbarley@gmail.com',
+      firstName: 'Mr.',
+      lastName: 'Bob Barley',
       title: 'Nutrition Coach',
-      job: 'Independent Consultant',
-      summarized: false,
-      verified: true,
-      followers: 32,
-      location: 'New York, NY',
-      socialLinks: {
-        instagram: '@bobbarley_nutrition',
-        facebook: 'facebook.com/bobbarleynutrition'
-      },
-      tags: ['Weight Loss', 'Meal Planning', 'Fitness'],
-      description: 'I want to lose weight, eat better, and stay fit'
+      jobTitle: 'Independent Consultant',
+      interests: ['Weight Loss', 'Meal Planning', 'Fitness'],
+      about: 'I want to lose weight, eat better, and stay fit'
     },
     {
       id: 5,
-      name: 'Mr. Bob Barley',
+      email: 'mr.bobbarley@gmail.com',
+      firstName: 'Mr.',
+      lastName: 'Bob Barley',
       title: 'Wellness Expert',
-      job: 'Holistic Health Center',
-      summarized: true,
-      verified: true,
-      followers: 32,
-      location: 'Los Angeles, CA',
-      socialLinks: {
-        instagram: '@bobbarley_wellness',
-        facebook: 'facebook.com/bobbarleywellness'
-      },
-      tags: ['Holistic', 'Plant-based', 'Mindfulness'],
-      description: 'I want to lose weight, eat better, and stay fit'
+      jobTitle: 'Holistic Health Center',
+      interests: ['Holistic', 'Plant-based', 'Mindfulness'],
+      about: 'I want to lose weight, eat better, and stay fit'
     },
     {
       id: 6,
-      name: 'Mr. Bob Barley',
+      email: 'mr.bobbarley@gmail.com',
+      firstName: 'Mr.',
+      lastName: 'Bob Barley',
       title: 'Fitness Instructor',
-      job: 'Urban Gym',
-      summarized: false,
-      verified: false,
-      followers: 32,
-      location: 'Chicago, IL',
-      socialLinks: {
-        instagram: '@bobbarley_fitness',
-        facebook: 'facebook.com/bobbarleyfitness'
-      },
-      tags: ['HIIT', 'Strength Training', 'Nutrition'],
-      description: 'I want to lose weight, eat better, and stay fit'
+      jobTitle: 'Urban Gym',
+      interests: ['HIIT', 'Strength Training', 'Nutrition'],
+      about: 'I want to lose weight, eat better, and stay fit'
     },
     {
       id: 7,
-      name: 'Mr. Bob Barley',
+      email: 'mr.bobbarley@gmail.com',
+      firstName: 'Mr.',
+      lastName: 'Bob Barley',
       title: 'Diet Specialist',
-      job: 'Health & Wellness Clinic',
-      summarized: true,
-      verified: true,
-      followers: 32,
-      location: 'Miami, FL',
-      socialLinks: {
-        instagram: '@bobbarley_diet',
-        facebook: 'facebook.com/bobbarleydiet'
-      },
-      tags: ['Keto', 'Low-carb', 'Intermittent Fasting'],
-      description: 'I want to lose weight, eat better, and stay fit'
+      jobTitle: 'Health & Wellness Clinic',
+      interests: ['Keto', 'Low-carb', 'Intermittent Fasting'],
+      about: 'I want to lose weight, eat better, and stay fit'
     },
     {
       id: 8,
-      name: 'Mr. Bob Barley',
+      email: 'mr.bobbarley@gmail.com',
+      firstName: 'Mr.',
+      lastName: 'Bob Barley',
       title: 'Sports Nutritionist',
-      job: 'Elite Performance Center',
-      summarized: false,
-      verified: true,
-      followers: 32,
-      location: 'Seattle, WA',
-      socialLinks: {
-        instagram: '@bobbarley_sports',
-        facebook: 'facebook.com/bobbarleysports'
-      },
-      tags: ['Athletes', 'Recovery', 'Performance'],
-      description: 'I want to lose weight, eat better, and stay fit'
+      jobTitle: 'Elite Performance Center',
+      interests: ['Athletes', 'Recovery', 'Performance'],
+      about: 'I want to lose weight, eat better, and stay fit'
     },
     {
       id: 9,
-      name: 'Mr. Bob Barley',
+      email: 'mr.bobbarley@gmail.com',
+      firstName: 'Mr.',
+      lastName: 'Bob Barley',
       title: 'Weight Management Coach',
-      job: 'Self-employed',
-      summarized: false,
-      verified: false,
-      followers: 32,
-      location: 'Austin, TX',
-      socialLinks: {
-        instagram: '@bobbarley_weight',
-        facebook: 'facebook.com/bobbarleyweight'
-      },
-      tags: ['Sustainable Weight Loss', 'Habit Building', 'Lifestyle Change'],
-      description: 'I want to lose weight, eat better, and stay fit'
+      jobTitle: 'Self-employed',
+      interests: ['Sustainable Weight Loss', 'Habit Building', 'Lifestyle Change'],
+      about: 'I want to lose weight, eat better, and stay fit'
     }
-  ]
+  ] as IUserAccountDto[]
 })
 
 
@@ -158,7 +123,7 @@ const data = ref({
         <Card v-for="dietitian in data.regularDietitians" :key="dietitian.id"
           class="col-span-1 rounded-sm transition-shadow duration-300 hover:shadow-md">
           <template #content>
-            <ProfileHeader v-bind="dietitian" summarized />
+            <ProfileHeader v-bind="dietitian" summarized :isYou="false" />
 
           </template>
         </Card>

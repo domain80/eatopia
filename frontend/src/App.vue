@@ -1,5 +1,5 @@
 <script setup lang="ts">
-document.title = 'Wholistika';
+document.title = 'Eatopia';
 
 import { OnboardingService } from '@/services/onboarding.service'
 import Toast from 'primevue/toast'

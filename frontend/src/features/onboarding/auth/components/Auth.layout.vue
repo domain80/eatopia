@@ -7,7 +7,7 @@
         class="sm:h-full flex flex-col items-center sm:gap-8 before:bg-gray-300 before:h-full before:w-px before:block before:content-[''] after:block after:h-full after:w-px after:bg-gray-300 after:content-[''] ">
         <img src="/images/Logo.svg" alt="logo" class="w-8 max-w-10" />
       </figure>
-      <h3 class="text-xl font-semibold">Wholistika</h3>
+      <h3 class="text-xl font-semibold">Eatopia</h3>
     </section>
 
     <slot />

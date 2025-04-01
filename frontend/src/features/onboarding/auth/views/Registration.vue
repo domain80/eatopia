@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-document.title = 'Wholistika | Register'
+document.title = 'Eatopia | Register'
 
 import { Form, FormField } from '@primevue/forms';
 import Button from 'primevue/button';

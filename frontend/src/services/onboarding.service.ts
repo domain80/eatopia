@@ -13,6 +13,53 @@ import { ApiError } from '@/shared/models/apiError.model'
 import { UserAccountDto } from '@/features/onboarding/auth/dto/userAccount.dto'
 import { Mapper } from '@/shared/utils/mapper'
 
+interface SearchParams {
+  query?: string
+  role?: string
+  createdAfter?: Date
+  createdBefore?: Date
+  page?: number
+  size?: number
+  sortBy?: string
+  direction?: 'asc' | 'desc'
+}
+
+interface PageResponse<T> {
+  content: T[]
+  pageable: {
+    pageNumber: number
+    pageSize: number
+    sort: {
+      empty: boolean
+      sorted: boolean
+      unsorted: boolean
+    }
+    offset: number
+    paged: boolean
+    unpaged: boolean
+  }
+  last: boolean
+  totalElements: number
+  totalPages: number
+  first: boolean
+  size: number
+  number: number
+  sort: {
+    empty: boolean
+    sorted: boolean
+    unsorted: boolean
+  }
+  numberOfElements: number
+  empty: boolean
+}
+
+interface SearchApiResponse<T> {
+  statusCode: number
+  message: string | null
+  body: T
+  error: any | null
+}
+
 export class OnboardingService {
   private static instance: OnboardingService
   private readonly baseUrl: string
@@ -21,7 +68,7 @@ export class OnboardingService {
   // todo: include refresh token in the token response
 
   private constructor(toast: ToastServiceMethods) {
-    this.baseUrl = import.meta.env.VITE_WHOLISTIKA_BACKEND || ''
+    this.baseUrl = import.meta.env.VITE_EATOPIA_BACKEND || ''
     this.toast = toast
   }
 
@@ -416,6 +463,47 @@ export class OnboardingService {
       if (error instanceof AxiosError) {
         throw new ApiError(
           error.response?.data?.message || 'Failed to get user profile',
+          error.response?.status || 500,
+          error.response?.data?.errors || [],
+        )
+      }
+      throw error
+    }
+  }
+
+  public async searchUsers(params: SearchParams): Promise<PageResponse<UserAccountDto>> {
+    try {
+      const response = await axios.get<SearchApiResponse<PageResponse<any>>>(
+        `${this.baseUrl}/api/auth/search`,
+        {
+          params: {
+            query: params.query,
+            role: params.role,
+            createdAfter: params.createdAfter?.toISOString(),
+            createdBefore: params.createdBefore?.toISOString(),
+            page: params.page || 0,
+            size: params.size || 10,
+            sortBy: params.sortBy || 'firstName',
+            direction: params.direction || 'asc',
+          },
+          headers: {
+            Authorization: `Bearer ${useAuthStore().getAccessToken}`,
+          },
+        },
+      )
+
+      if (!response.data.body) {
+        throw new Error('No response body received')
+      }
+
+      return {
+        ...response.data.body,
+        content: response.data.body.content.map((item: any) => Mapper.map(item, UserAccountDto)),
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new ApiError(
+          error.response?.data?.message || 'Failed to search users',
           error.response?.status || 500,
           error.response?.data?.errors || [],
         )

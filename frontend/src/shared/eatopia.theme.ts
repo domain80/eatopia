@@ -1,7 +1,7 @@
 import { definePreset } from '@primeuix/themes'
 import Aura from '@primeuix/themes/aura'
 
-export const WholistikaThemePreset = definePreset(Aura, {
+export const EatopiaThemePreset = definePreset(Aura, {
   semantic: {
     primary: {
       50: '{Teal.50}',

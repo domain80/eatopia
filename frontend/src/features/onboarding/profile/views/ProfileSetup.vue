@@ -1,5 +1,5 @@
 <script setup lang="ts">
-document.title = 'Wholistika | Profile Setup'
+document.title = 'Eatopia | Profile Setup'
 
 import AuthLayout from '@/features/onboarding/auth/components/Auth.layout.vue';
 import ProfileBasicForm from '../components/ProfileBasicForm.vue';

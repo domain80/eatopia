@@ -12,7 +12,7 @@ import { OnboardingService } from '@/services/onboarding.service'
 import { useToast } from 'primevue/usetoast'
 import type { UserAccountDto } from '../auth/dto/userAccount.dto';
 
-document.title = 'Wholistika | Profile';
+document.title = 'Eatopia | Profile';
 
 const toast = useToast()
 const onboardingService = OnboardingService.getInstance()
