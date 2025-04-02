@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -58,8 +59,8 @@ public class UserAccountController {
     public  Page<UserAccount>  searchUsers(
             @RequestParam(required = false) String query,
             @RequestParam(required = false) String role,
-            @RequestParam(required = false) LocalDate createdAfter,
-            @RequestParam(required = false) LocalDate createdBefore,
+            @RequestParam(required = false) LocalDateTime createdAfter,
+            @RequestParam(required = false) LocalDateTime createdBefore,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "firstName") String sortBy,

@@ -6,6 +6,7 @@ import type { RegistrationDto } from '../dto/registration.dto'
 import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { AxiosError } from 'axios'
+import router from '@/router'
 
 const isLoading = ref(false)
 
@@ -64,6 +65,8 @@ export const useRegistration = () => {
       const formData = e.values as RegistrationDto
       await onboardingService.register(formData)
       await onboardingService.login()
+
+      router.push({ name: 'profile-setup' })
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.add({

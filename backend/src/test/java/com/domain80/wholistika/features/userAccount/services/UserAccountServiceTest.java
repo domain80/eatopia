@@ -40,7 +40,7 @@ class UserAccountServiceTest {
                 .firstName("John")
                 .lastName("Doe")
                 .phoneNumber("1234567890")
-                .role(UserRole.USER)
+                .role(UserRole.PROFESSIONAL)
                 .isNewUser(true)
                 .title("Mr.")
                 .jobTitle("Software Engineer")

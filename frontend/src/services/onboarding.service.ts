@@ -143,7 +143,8 @@ export class OnboardingService {
   }
 
   public async register(data: RegistrationDto): Promise<UserAccount | null> {
-    return null
+    return {} as UserAccount
+    // return null
     try {
       // Ensure we have an access token
       const tokenResponse = await this.getAccessToken()

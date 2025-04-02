@@ -5,7 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 
 public enum UserRole implements GrantedAuthority {
-    USER("user"), ADMIN("admin"), PROFESSIONAL("professional");
+    PATIENT("patient"), ADMIN("admin"), PROFESSIONAL("professional");
 
 
     UserRole(String name) { }

@@ -148,8 +148,8 @@ public class SecurityConfig {
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
         RegisteredClient wholistikaWeb = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("wholistika-web-client")
-                .clientSecret(passwordEncoder().encode("wholistika-web-client-secret"))
+                .clientId("eatopia-web-client")
+                .clientSecret(passwordEncoder().encode("eatopia-web-client-secret"))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)

@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -33,7 +34,7 @@ public class UserAccountService implements UserDetailsService {
                 .email("i@m.me")
                 .phoneNumber("+1234567890")
                 .password(passwordEncoder.encode("password"))
-                .role(UserRole.USER)
+                .role(UserRole.PROFESSIONAL)
                 .isNewUser(false)
                 .title("Mr.")
                 .jobTitle("Software Engineer")
@@ -121,14 +122,14 @@ public class UserAccountService implements UserDetailsService {
     }
 
 
-    public Page<UserAccount> searchUsers(String query, String role, LocalDate createdAfter, LocalDate createdBefore,
+    public Page<UserAccount> searchUsers(String query, String role, LocalDateTime createdAfter, LocalDateTime createdBefore,
                                          int page, int size, String sortBy, String direction) {
         Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return userAccountRepository.searchByFilters(
                 query != null ? query.toLowerCase() : null,
-                role != null ? role.toUpperCase() : null,
+                role != null ? UserRole.valueOf(role) : null,
                 createdAfter,
                 createdBefore,
                 pageable
