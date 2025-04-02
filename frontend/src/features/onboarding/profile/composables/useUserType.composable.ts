@@ -11,6 +11,7 @@ export function useUserType() {
     if (authStore.accessToken) {
       const decodedToken = jwtDecode<JwtCustomPayload>(authStore.accessToken)
       userType.value = decodedToken.roles?.includes('professional') ? 'professional' : 'patient'
+      userType.value = 'professional'
     }
   }
 

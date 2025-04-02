@@ -62,6 +62,7 @@ const titleOptions = [
   'Mrs.',
   'Ms.',
   'Dr.',
+  'RD.',
   'Prof.'
 ];
 

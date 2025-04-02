@@ -12,6 +12,7 @@ import type { ProfileSetupData } from '@/shared/models/ProfileSetup.model';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import DatePicker from 'primevue/datepicker';
 import type { WorkExperience } from '@/shared/models/ProfileSetup.model';
+import { FileUpload } from 'primevue';
 
 const emit = defineEmits<{
   'update:data': [data: ProfileSetupData['workExperiences']]
@@ -28,6 +29,7 @@ const workExperiences = ref<ProfileSetupData['workExperiences']>([{
 
 // Form validation schema
 const resolver = zodResolver(z.object({
+  license: z.string({ message: "You cant be a professional without a license" }),
   title: z.string().min(1, 'Job title is required'),
   where: z.string().min(1, 'Workplace is required'),
   startDate: z.date({
@@ -71,21 +73,33 @@ const handleSubmit = (event: FormSubmitEvent) => {
 
 <template>
   <div class="flex flex-col space-y-6 ">
-    <h1 class="text-2xl font-semibold text-gray-700">Add one work experience</h1>
 
     <Form v-slot="$form" :resolver="resolver" @submit="handleSubmit" validate-on-blur :validate-on-value-update="false"
       :validate-on-submit="true" class="flex flex-col gap-6">
+
+      <h1 class="text-2xl font-semibold text-gray-700">Upload a pdf of your certificte</h1>
+
+      <!-- Title -->
+      <FormField class="flex flex-col gap-2 items-start" name="title">
+        <label class="font-medium">Certificate</label>
+        <FileUpload name="license" mode="basic" accept="image/*" :auto="true" @select="" ref="fileUpload" />
+        <Message v-if="$form.title?.invalid" severity="error" size="small" variant="simple">{{ $form.title.error.message
+          }}</Message>
+      </FormField>
+
+
+      <h1 class="text-2xl font-semibold text-gray-700">Add one work experience</h1>
       <!-- Title -->
       <FormField class="flex flex-col gap-2" name="title">
         <label class="font-medium">Title</label>
         <InputText name="title" class="w-full" />
         <Message v-if="$form.title?.invalid" severity="error" size="small" variant="simple">{{ $form.title.error.message
-        }}</Message>
+          }}</Message>
       </FormField>
 
       <!-- Where -->
       <FormField class="flex flex-col gap-2" name="where">
-        <label class="font-medium">Where</label>
+        <label class="font-medium">Where (Company)</label>
         <InputText name="where" class="w-full" />
         <Message v-if="$form.where?.invalid" severity="error" size="small">{{ $form.where.error.message }}</Message>
       </FormField>
