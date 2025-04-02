@@ -123,11 +123,11 @@ export class OnboardingService {
 
       if (apiResponse.isSuccess() && apiResponse.body) {
         const authStore = useAuthStore()
-        authStore.setAccessToken({
-          token: apiResponse.body.access_token,
-          refreshToken: apiResponse.body.refresh_token || '',
-          expiresIn: apiResponse.body.expires_in,
-        })
+        // authStore.setAccessToken({
+        //   // token: apiResponse.body.access_token,
+        //   // refreshToken: apiResponse.body.refresh_token || '',
+        //   // expiresIn: apiResponse.body.expires_in,
+        // })
       }
 
       return apiResponse.body!
@@ -153,7 +153,7 @@ export class OnboardingService {
 
       const response = await axios.post(`${this.baseUrl}/api/auth/register`, data, {
         headers: {
-          Authorization: `Bearer ${tokenResponse.access_token}`,
+          // Authorization: `Bearer ${tokenResponse.access_token}`,
           'Content-Type': 'application/json',
         },
       })

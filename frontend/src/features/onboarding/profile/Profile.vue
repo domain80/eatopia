@@ -23,7 +23,7 @@ const onboardingService = OnboardingService.getInstance()
 const profileData = ref<UserAccountDto>({
   id: '123',
   email: 'john.doe@example.com',
-  firstName: 'John',
+  firstName: 'Benjamin',
   lastName: 'Doe',
   title: 'Dr.',
   jobTitle: 'Nutritionist',

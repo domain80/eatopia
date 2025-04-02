@@ -65,7 +65,7 @@ defineProps<ProfileHeaderProps>();
     <div class="flex items-end">
       <Avatar size="xlarge" class="mr-4" shape="circle" image="/images/avatar.png" />
       <div class="flex flex-col">
-        <h1 class="text-xl font-bold ">{{ firstName + ' ' + lastName }}</h1>
+        <h1 class="text-xl font-bold ">{{ title }} {{ firstName + ' ' + lastName }}</h1>
         <div class="flex items-center ">
           <!-- <i class="pi pi-verified text-primary mr-2" v-if="verified"></i> -->
           <!-- <span v-if="verified">Verified</span> -->
