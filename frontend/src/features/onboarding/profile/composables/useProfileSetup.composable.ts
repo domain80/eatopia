@@ -51,7 +51,7 @@ export function useProfileSetup() {
   }
 
   const handleSubmit = async () => {
-    await OnboardingService.getInstance().submitProfileSetup(profileSetupData)
+    // await OnboardingService.getInstance().submitProfileSetup(profileSetupData)
     await router.push('/dashboard/profile')
   }
 

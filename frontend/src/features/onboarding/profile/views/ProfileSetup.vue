@@ -27,7 +27,7 @@ const {
 
 <template>
   <AuthLayout>
-    <main class=" col-span-2 w-full">
+    <main class=" col-span-2 w-full py-24">
       <div class="card flex justify-center">
         <Stepper value="1" class="basis-[50rem]">
           <StepList class="w-2/4 p-0 py-4">

@@ -11,8 +11,8 @@ import { z } from 'zod';
 import type { ProfileSetupData } from '@/shared/models/ProfileSetup.model';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import DatePicker from 'primevue/datepicker';
-import type { WorkExperience } from '@/shared/models/ProfileSetup.model';
-import { FileUpload } from 'primevue';
+import { FileUpload, type FileUploadSelectEvent } from 'primevue';
+import { useTemplateRef } from 'vue';
 
 const emit = defineEmits<{
   'update:data': [data: ProfileSetupData['workExperiences']]
@@ -27,9 +27,13 @@ const workExperiences = ref<ProfileSetupData['workExperiences']>([{
   jobSummary: ''
 }]);
 
+
+
 // Form validation schema
 const resolver = zodResolver(z.object({
-  license: z.string({ message: "You cant be a professional without a license" }),
+  license: z.string({
+    message: "You must have a license to continue"
+  }),
   title: z.string().min(1, 'Job title is required'),
   where: z.string().min(1, 'Workplace is required'),
   startDate: z.date({
@@ -37,12 +41,13 @@ const resolver = zodResolver(z.object({
     invalid_type_error: 'Start date must be a valid date',
   }),
   endDate: z.date().nullable().optional(),
-  currentlyWork: z.boolean(),
+  currentlyWork: z.boolean().nullable().optional(),
   jobSummary: z.string()
     .min(20, 'Job summary must be at least 20 characters')
     .max(500, 'Job summary cannot exceed 500 characters')
 }).refine(
   (data) => {
+    console.log({ data })
     if (!data.currentlyWork && !data.endDate) {
       return false;
     }
@@ -69,29 +74,52 @@ const handleSubmit = (event: FormSubmitEvent) => {
   emit('update:data', [event.values] as ProfileSetupData['workExperiences'])
   props.onNavigate('end');
 };
+
+
+const src = ref<string | ArrayBuffer | null | undefined>(null);
+const licenseRef = ref();
+
+function onFileSelect(event: string | undefined) {
+  // const file = event.files[0];
+  const reader = new FileReader();
+
+  // src.value = event;
+  console.log({ event })
+
+  // reader.onload = async (e) => {
+  //   src.value = e.target?.result as string;
+  //   licenseRef.value = src;
+  // };
+
+  // reader.readAsDataURL(event);
+}
+
 </script>
 
 <template>
-  <div class="flex flex-col space-y-6 ">
+  <div class="flex flex-col space-y-6 max-w-xl ">
 
     <Form v-slot="$form" :resolver="resolver" @submit="handleSubmit" validate-on-blur :validate-on-value-update="false"
       :validate-on-submit="true" class="flex flex-col gap-6">
 
-      <h1 class="text-2xl font-semibold text-gray-700">Upload a pdf of your certificte</h1>
+      <h1 class="text-2xl font-semibold text-gray-700">Upload a picture of your License</h1>
+      <FormField class="flex flex-col gap-2 items-start" name="license">
+        <div class="flex">
+          <!-- <FileUpload mode="basic" @select="onFileSelect" customUpload auto class="" /> -->
+          <InputText name="license" type="file" variant="filled" class="visible " @update:model-value="onFileSelect" />
+        </div>
+        <img v-if="src" :src="src as string | undefined" alt="Image" class="shadow-md rounded-xl w-full sm:w-64" />
 
-      <!-- Title -->
-      <FormField class="flex flex-col gap-2 items-start" name="title">
-        <label class="font-medium">Certificate</label>
-        <FileUpload name="license" mode="basic" accept="image/*" :auto="true" @select="" ref="fileUpload" />
-        <Message v-if="$form.title?.invalid" severity="error" size="small" variant="simple">{{ $form.title.error.message
-          }}</Message>
+        <Message v-if="$form.license?.invalid" severity="error" size="small" variant="simple">{{
+          $form.license.error.message
+        }}</Message>
       </FormField>
 
 
       <h1 class="text-2xl font-semibold text-gray-700">Add one work experience</h1>
       <!-- Title -->
       <FormField class="flex flex-col gap-2" name="title">
-        <label class="font-medium">Title</label>
+        <label class="font-medium">Job title</label>
         <InputText name="title" class="w-full" />
         <Message v-if="$form.title?.invalid" severity="error" size="small" variant="simple">{{ $form.title.error.message
           }}</Message>
@@ -101,7 +129,8 @@ const handleSubmit = (event: FormSubmitEvent) => {
       <FormField class="flex flex-col gap-2" name="where">
         <label class="font-medium">Where (Company)</label>
         <InputText name="where" class="w-full" />
-        <Message v-if="$form.where?.invalid" severity="error" size="small">{{ $form.where.error.message }}</Message>
+        <Message v-if="$form.where?.invalid" severity="error" size="small" variant="simple">{{ $form.where.error.message
+          }}</Message>
       </FormField>
 
       <!-- Working Period -->
@@ -111,13 +140,15 @@ const handleSubmit = (event: FormSubmitEvent) => {
           <FormField class="flex-1 space-y-2" name="startDate">
             <DatePicker name="startDate" view="month" dateFormat="MM yy" placeholder="Start Period" fluid
               class="w-full" />
-            <Message v-if="$form.startDate?.invalid" severity="error" size="small">{{ $form.startDate.error.message }}
+            <Message v-if="$form.startDate?.invalid" severity="error" size="small" variant="simple">{{
+              $form.startDate.error.message }}
             </Message>
           </FormField>
           <FormField class="flex-1 space-y-2" name="endDate">
             <Calendar name="endDate" view="month" dateFormat="MM yy" placeholder="End Period"
               :disabled="$form.currentlyWork?.value" class="w-full" />
-            <Message v-if="$form.endDate?.invalid" severity="error" size="small">{{ $form.endDate.error.message }}
+            <Message v-if="$form.endDate?.invalid" severity="error" size="small" variant="simple">{{
+              $form.endDate.error.message }}
             </Message>
           </FormField>
         </div>
@@ -134,7 +165,8 @@ const handleSubmit = (event: FormSubmitEvent) => {
           <span class="text-sm text-gray-500">80 words max</span>
         </div>
         <Textarea name="jobSummary" placeholder="Tell others what how you can help them" rows="4" class="w-full" />
-        <Message v-if="$form.jobSummary?.invalid" severity="error" size="small">{{ $form.jobSummary.error.message }}
+        <Message v-if="$form.jobSummary?.invalid" severity="error" size="small" variant="simple">{{
+          $form.jobSummary.error.message }}
         </Message>
       </FormField>
 

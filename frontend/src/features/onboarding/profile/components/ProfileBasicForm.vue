@@ -32,7 +32,7 @@ const resolver = zodResolver(z.object({
   about: z.string({ message: 'Tell us a bit more about yourself' })
     .min(10, 'We need to know a bit more about you')
     .max(300, 'Bio is too long'),
-  imageData: z.string().optional()
+  imageData: z.string()
 }));
 
 watch(profileData, (newValue) => {
