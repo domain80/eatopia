@@ -19,7 +19,7 @@ export interface IUserAccountDto {
     title: string
     where: string
     startDate: Date
-    endDate?: Date
+    endDate: Date | null
     currentlyWork: boolean
     jobSummary: string
   }>
@@ -46,7 +46,7 @@ export class UserAccountDto implements IUserAccountDto {
     title: string
     where: string
     startDate: Date
-    endDate?: Date
+    endDate: Date | null
     currentlyWork: boolean
     jobSummary: string
   }>

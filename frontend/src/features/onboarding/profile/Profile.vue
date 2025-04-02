@@ -17,38 +17,36 @@ document.title = 'Eatopia | Profile';
 const toast = useToast()
 const onboardingService = OnboardingService.getInstance()
 
-onMounted(async () => {
-  try {
-    const userData = await onboardingService.getWhoami()
-    console.log('Profile Data:', userData)
+// onMounted(async () => {
+// })
 
-    if (userData) {
-      profileData.value = {
-        id: userData.id,
-        email: userData.email,
-        firstName: userData.firstName || '',
-        lastName: userData.lastName || '',
-        title: userData.title || '',
-        jobTitle: userData.jobTitle || '',
-        interests: userData.interests || '',
-        about: userData.about || '',
-        imageData: userData.imageData || '',
-        medicalInfo: userData.medicalInfo || [],
-        workExperiences: userData.workExperiences || [],
-      }
+const profileData = ref<UserAccountDto>({
+  id: '123',
+  email: 'john.doe@example.com',
+  firstName: 'John',
+  lastName: 'Doe',
+  title: 'Dr.',
+  jobTitle: 'Nutritionist',
+  interests: 'Nutrition, Fitness, Wellness',
+  about: 'Passionate about helping people achieve their health and fitness goals through proper nutrition and lifestyle changes.',
+  imageData: 'https://placekitten.com/200/200',
+  medicalInfo: [
+    {
+      name: 'None',
+      summary: 'N/A',
     }
-  } catch (error) {
-    console.error('Failed to fetch profile data:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to load profile data',
-      life: 3000,
-    })
-  }
-})
-
-const profileData = ref<UserAccountDto>({} as UserAccountDto);
+  ],
+  workExperiences: [
+    {
+      title: 'Nutritionist',
+      where: 'Health First Clinic',
+      startDate: new Date('2020-01-01'),
+      endDate: null,
+      currentlyWork: true,
+      jobSummary: 'Providing nutrition counseling and developing meal plans'
+    }
+  ],
+} as UserAccountDto);
 
 const experiences = ref([
   {

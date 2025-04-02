@@ -11,6 +11,11 @@ const router = createRouter({
       component: () => import('../features/onboarding/auth/views/Registration.vue'),
     },
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('../features/onboarding/auth/views/Login.vue'),
+    },
+    {
       path: '/authorized',
       name: 'authorized',
       component: () => import('../features/onboarding/auth/views/Authorized.vue'),
@@ -28,7 +33,7 @@ const router = createRouter({
         {
           path: 'home',
           name: 'home',
-          component: () => import('@/shared/views/DefaultRoute.shared.vue'),
+          component: () => import('../features/home/Home.vue'),
         },
         {
           path: 'search',

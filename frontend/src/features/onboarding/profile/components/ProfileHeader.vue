@@ -15,7 +15,7 @@ defineProps<ProfileHeaderProps>();
 <template>
   <div class=" flex flex-col gap-4 " v-if="summarized">
     <div class="flex " :class="summarized ? 'items-start' : 'items-end'">
-      <Avatar size="large" class="mr-4" shape="circle" />
+      <Avatar size="large" class="mr-4" shape="circle" image="/images/avatar.png" />
       <div class="grid">
         <div class="flex flex-wrap gap-2 divide-x-2 divide-solid  divide-teal-600"
           :class="summarized ? 'items-center' : 'items-end'">
@@ -63,9 +63,9 @@ defineProps<ProfileHeaderProps>();
 
   <div class="mb-4 flex flex-col gap-4 " v-if="!summarized">
     <div class="flex items-end">
-      <Avatar size="xlarge" class="mr-4" shape="circle" />
-      <div>
-        <h1 class="text-xl font-bold mb-2">{{ firstName + ' ' + lastName }}</h1>
+      <Avatar size="xlarge" class="mr-4" shape="circle" image="/images/avatar.png" />
+      <div class="flex flex-col">
+        <h1 class="text-xl font-bold ">{{ firstName + ' ' + lastName }}</h1>
         <div class="flex items-center ">
           <!-- <i class="pi pi-verified text-primary mr-2" v-if="verified"></i> -->
           <!-- <span v-if="verified">Verified</span> -->

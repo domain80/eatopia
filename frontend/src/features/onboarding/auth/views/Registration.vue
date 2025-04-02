@@ -13,9 +13,16 @@ import Message from 'primevue/message';
 import { useRegistration } from '../components/registration.composable';
 import AuthLayout from '../components/Auth.layout.vue';
 import { OnboardingService } from '@/services/onboarding.service';
+import router from '@/router';
+import { RouterLink } from 'vue-router';
 
 const { resolver, handleSubmit, isLoading } = useRegistration();
 const onboardingService = OnboardingService.getInstance()
+
+const handleLogin = async () => {
+  await onboardingService.login()
+  router.push('/login')
+}
 
 </script>
 
@@ -24,9 +31,10 @@ const onboardingService = OnboardingService.getInstance()
     <main class="grid gap-6 w-full items-center sm:col-span-5 max-w-xl">
       <header class="grid gap-1">
         <h1 class="text-3xl font-bold">Register</h1>
-        <p>Already have an account? <button class="font-bold text-teal-800 cursor-pointer"
-            @click="onboardingService.login">sign
-            in</button></p>
+        <p>
+          Already have an account?
+          <RouterLink :to="{ name: 'login' }" class="font-bold text-teal-800 cursor-pointer">sign in</RouterLink>
+        </p>
       </header>
 
       <Form v-slot="$form" :resolver @submit="handleSubmit" validate-on-blur :validate-on-value-update="false"

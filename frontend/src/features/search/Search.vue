@@ -7,7 +7,7 @@ import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import FeaturedDietitiensComponent from './components/FeaturedDietitiens.component.vue';
 import { Button } from 'primevue';
-import { OnboardingService } from '@/services/onboarding.service';
+// import { OnboardingService } from '@/services/onboarding.service';
 import { useToast } from 'primevue/usetoast';
 import { useDebounce } from '@/shared/composables/useDebounce';
 import type { UserAccountDto } from '../onboarding/auth/dto/userAccount.dto';
@@ -15,7 +15,7 @@ import type { UserAccountDto } from '../onboarding/auth/dto/userAccount.dto';
 document.title = 'Eatopia | Search';
 
 const toast = useToast();
-const onboardingService = OnboardingService.getInstance();
+// const onboardingService = OnboardingService.getInstance();
 
 const searchQuery = ref('');
 const searchResults = ref<UserAccountDto[]>([]);
@@ -31,51 +31,52 @@ const roles = [
   { label: 'Professional', value: 'PROFESSIONAL' }
 ];
 
-const debouncedSearch = useDebounce(async () => {
-  if (!searchQuery.value && !selectedRole.value) {
-    searchResults.value = [];
-    return;
-  }
+// const debouncedSearch = useDebounce(async () => {
+//   if (!searchQuery.value && !selectedRole.value) {
+//     searchResults.value = [];
+//     return;
+//   }
 
-  try {
-    isLoading.value = true;
-    const response = await onboardingService.searchUsers({
-      query: searchQuery.value,
-      role: selectedRole.value || undefined,
-      page: currentPage.value,
-      size: 20
-    });
-    searchResults.value = response.content;
-    totalPages.value = response.totalPages;
-    totalElements.value = response.totalElements;
-  } catch (error) {
-    console.error('Search failed:', error);
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to search users',
-      life: 3000,
-    });
-  } finally {
-    isLoading.value = false;
-  }
-}, 300);
+//   try {
+//     isLoading.value = true;
+//     const response = await onboardingService.searchUsers({
+//       query: searchQuery.value,
+//       role: selectedRole.value || undefined,
+//       page: currentPage.value,
+//       size: 20
+//     });
+//     searchResults.value = response.content;
+//     totalPages.value = response.totalPages;
+//     totalElements.value = response.totalElements;
+//   } catch (error) {
+//     console.error('Search failed:', error);
+//     toast.add({
+//       severity: 'error',
+//       summary: 'Error',
+//       detail: 'Failed to search users',
+//       life: 3000,
+//     });
+//   } finally {
+//     isLoading.value = false;
+//   }
+// }, 300);
 
-const handleSearch = () => {
-  currentPage.value = 0;
-  debouncedSearch();
-};
+// const handleSearch = () => {
+//   currentPage.value = 0;
+//   debouncedSearch();
+// };
 
-const handleRoleSelect = (role: string) => {
-  selectedRole.value = role;
-  currentPage.value = 0;
-  handleSearch();
-};
+// const handleRoleSelect = (role: string) => {
+//   selectedRole.value = role;
+//   currentPage.value = 0;
+//   handleSearch();
+// };
 
-const handlePageChange = (page: number) => {
-  currentPage.value = page;
-  debouncedSearch();
-};
+// const handlePageChange = (page: number) => {
+//   currentPage.value = page;
+//   debouncedSearch();
+// };
+
 </script>
 
 <template>
@@ -90,13 +91,13 @@ const handlePageChange = (page: number) => {
           Discover ways to get fit, <br> stay healthy and improve eating habits
         </h2>
         <IconField class="w-full max-w-lg">
-          <InputText v-model="searchQuery" placeholder="Search" fluid @input="handleSearch" />
+          <InputText v-model="searchQuery" placeholder="Search" fluid />
           <InputIcon class="pi pi-search" />
         </IconField>
         <section class="grid gap-2 items-center text-sm">
           <div class="flex gap-4 *:h-max *:w-max *:rounded-sm *:py-1 *:px-4">
             <Button v-for="role in roles" :key="role.value" :label="role.label" variant="outlined" severity="secondary"
-              :class="{ 'bg-primary-50': selectedRole === role.value }" @click="handleRoleSelect(role.value)" />
+              :class="{ 'bg-primary-50': selectedRole === role.value }" />
           </div>
         </section>
       </header>
@@ -116,7 +117,7 @@ const handlePageChange = (page: number) => {
 
         <div v-if="totalPages > 1" class="flex justify-center gap-2 mt-4">
           <Button v-for="page in totalPages" :key="page - 1" :label="page.toString()"
-            :class="{ 'bg-primary-50': currentPage === page - 1 }" @click="handlePageChange(page - 1)" />
+            :class="{ 'bg-primary-50': currentPage === page - 1 }" />
         </div>
       </div>
 

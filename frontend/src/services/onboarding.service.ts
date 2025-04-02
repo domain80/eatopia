@@ -87,6 +87,7 @@ export class OnboardingService {
   }
 
   public async getAccessToken(): Promise<TokenResponseDto | null> {
+    return null
     if (useAuthStore().isAuthenticated) {
       return {
         access_token: useAuthStore().getAccessToken!,
@@ -142,6 +143,7 @@ export class OnboardingService {
   }
 
   public async register(data: RegistrationDto): Promise<UserAccount | null> {
+    return null
     try {
       // Ensure we have an access token
       const tokenResponse = await this.getAccessToken()
@@ -211,6 +213,7 @@ export class OnboardingService {
   }
 
   public async login(): Promise<UserAccount | null> {
+    return null
     const codeVerifier = this.generateCodeVerifier()
     const codeChallenge = await this.generateCodeChallenge(codeVerifier)
 
@@ -265,6 +268,7 @@ export class OnboardingService {
   }
 
   public async logout() {
+    return null
     const authStore = useAuthStore()
     authStore.clearTokens()
 

@@ -5,7 +5,7 @@ const navItems = [
   { routeName: 'home', icon: 'pi pi-home', label: 'Home' },
   { routeName: 'search', icon: 'pi pi-search', label: 'Search' },
   { routeName: 'messages', icon: 'pi pi-comments', label: 'Messages' },
-  { routeName: 'profile', icon: 'pi pi-user', label: 'Profile' },
+  { routeName: 'profile', image: '/images/avatar.png', label: 'Profile' },
 ]
 </script>
 
@@ -20,8 +20,11 @@ const navItems = [
 
       <nav class="flex flex-col gap-2 px-4">
         <NavItem v-for="item in navItems" :key="item.routeName" :route-name="item.routeName" :label="item.label">
-          <template #icon>
+          <template #icon v-if="item.icon">
             <i :class="item.icon" class="text-lg ml-1"></i>
+          </template>
+          <template #image v-if="item.image">
+            <img :src="item.image" alt="Profile" class="w-6 aspect-square rounded-full" />
           </template>
         </NavItem>
       </nav>
